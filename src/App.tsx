@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'motion/react';
-import { 
-  Code2, Database, Network, LineChart, Terminal, 
-  Server, BrainCircuit, Monitor, ChevronRight, 
+import {
+  Code2, Database, Network, LineChart, Terminal,
+  Server, BrainCircuit, Monitor, ChevronRight,
   Github, Linkedin, Mail, ExternalLink, Calendar, Send
 } from 'lucide-react';
 
 const BackgroundElements = () => {
   return (
-    <div 
+    <div
       className="fixed inset-0 z-[-1] overflow-hidden pointer-events-none"
       style={{ background: 'radial-gradient(circle at 10% 10%, rgba(59,130,246,0.15) 0, transparent 40%), radial-gradient(circle at 90% 90%, rgba(168,85,247,0.15) 0, transparent 40%)' }}
     >
@@ -67,7 +67,7 @@ const Hero = () => {
   return (
     <section className="min-h-screen flex items-center relative pt-20 px-6">
       <div className="max-w-7xl mx-auto w-full grid lg:grid-cols-2 gap-12 items-center">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8 }}
@@ -75,21 +75,21 @@ const Hero = () => {
         >
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full badge-neon-blue w-fit">
             <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
-            <span className="text-xs font-bold text-neon-blue uppercase tracking-wider">Candidate GSA 2026</span>
+            <span className="text-xs font-bold text-neon-blue uppercase tracking-wider">Programmer</span>
           </div>
-          
+
           <h1 className="text-5xl lg:text-7xl font-bold leading-tight tracking-tight">
             Hi, I'm <span className="text-white">Afrizal Rafli</span>
           </h1>
-          
+
           <h2 className="text-xl lg:text-2xl text-slate-300 font-medium opacity-80 mt-2">
-            Full-Stack Developer <br className="hidden lg:block"/> & Data Science Enthusiast
+            Full-Stack Developer <br className="hidden lg:block" /> & Data Science Enthusiast
           </h2>
-          
+
           <p className="text-slate-400 max-w-lg mt-4">
             A passionate student at Politeknik Negeri Malang (Polinema), crafting futuristic web experiences and analyzing complex data.
           </p>
-          
+
           <div className="flex flex-wrap gap-4 mt-6">
             <a href="#projects" className="px-6 py-2.5 rounded-[16px] glass-panel text-neon-blue font-semibold hover:bg-white/5 transition-all flex items-center gap-2 hover:-translate-y-1">
               View My Work <ChevronRight size={18} />
@@ -99,16 +99,16 @@ const Hero = () => {
             </a>
           </div>
         </motion.div>
-        
-        <motion.div 
+
+        <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1 }}
           className="relative h-[400px] lg:h-[600px] hidden md:block"
         >
           {/* Abstract 3D/Tech representation */}
-          <motion.div 
-            animate={{ 
+          <motion.div
+            animate={{
               y: [-10, 10, -10],
               rotateZ: [0, 5, 0]
             }}
@@ -119,10 +119,10 @@ const Hero = () => {
               <div className="absolute inset-0 rounded-full border border-blue-500/30 animate-[spin_10s_linear_infinite]" />
               <div className="absolute inset-4 rounded-full border border-purple-500/30 animate-[spin_15s_linear_infinite_reverse]" />
               <div className="absolute inset-8 rounded-full border border-blue-400/20 animate-[spin_20s_linear_infinite]" />
-              <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/10 to-purple-500/10 rounded-full backdrop-blur-sm flex items-center justify-center border border-white/5">
-                <Terminal size={64} className="text-blue-300 opacity-80" />
+              <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/10 to-purple-500/10 rounded-full backdrop-blur-sm flex items-center justify-center border border-white/5 overflow-hidden">
+                <img src="/424064945.jpg" alt="Afrizal Rafli" className="w-full h-full object-cover" />
               </div>
-              
+
               {/* Floating tech icons */}
               <motion.div animate={{ y: [-15, 15, -15] }} transition={{ duration: 5, repeat: Infinity }} className="absolute -top-4 -right-4 p-4 glass-panel glow-border">
                 <Database className="text-blue-400" size={24} />
@@ -175,7 +175,7 @@ const strengths = [
 const About = () => {
   return (
     <section id="about" className="py-24 px-6 w-full max-w-7xl mx-auto">
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
@@ -184,7 +184,7 @@ const About = () => {
         <h2 className="text-3xl md:text-5xl font-bold mb-4">Core <span className="text-neon-blue">Strengths</span></h2>
         <p className="text-slate-400 max-w-2xl mx-auto">A unique blend of software engineering, database mastery, and data science capabilities.</p>
       </motion.div>
-      
+
       <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
         {strengths.map((item, index) => (
           <motion.div
@@ -195,29 +195,29 @@ const About = () => {
             transition={{ delay: index * 0.1 }}
             whileHover={{ y: -10, scale: 1.02 }}
             className={`glass-panel p-8 relative group overflow-hidden transition-all duration-300
-              ${item.color === 'blue' ? 'hover:glow-border' : 
-                item.color === 'purple' ? 'hover:glow-border-purple' : 
-                item.color === 'green' ? 'hover:border-green-500/30' : 
-                'hover:border-orange-500/30'}`}
+              ${item.color === 'blue' ? 'hover:glow-border' :
+                item.color === 'purple' ? 'hover:glow-border-purple' :
+                  item.color === 'green' ? 'hover:border-green-500/30' :
+                    'hover:border-orange-500/30'}`}
           >
             <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl rounded-bl-full opacity-0 group-hover:opacity-20 transition-opacity
-              ${item.color === 'blue' ? 'from-blue-500' : 
-                item.color === 'purple' ? 'from-purple-500' : 
-                item.color === 'green' ? 'from-green-500' : 
-                'from-orange-500'}`} 
+              ${item.color === 'blue' ? 'from-blue-500' :
+                item.color === 'purple' ? 'from-purple-500' :
+                  item.color === 'green' ? 'from-green-500' :
+                    'from-orange-500'}`}
             />
             {item.icon}
             <h3 className="text-xl font-bold mb-3">{item.title}</h3>
             <p className="text-slate-400 text-sm mb-6 leading-relaxed">{item.desc}</p>
             <div className="flex flex-wrap gap-2 mt-auto">
               {item.skills.map((skill, i) => (
-                <span 
-                  key={i} 
+                <span
+                  key={i}
                   className={`text-[10px] font-bold px-2.5 py-1 rounded-md uppercase tracking-wider border transition-all duration-300
-                    ${item.color === 'blue' ? 'bg-blue-500/10 text-blue-300 border-blue-500/20 group-hover:bg-blue-500/20 group-hover:border-blue-400/30' : 
-                      item.color === 'purple' ? 'bg-purple-500/10 text-purple-300 border-purple-500/20 group-hover:bg-purple-500/20 group-hover:border-purple-400/30' : 
-                      item.color === 'green' ? 'bg-green-500/10 text-green-300 border-green-500/20 group-hover:bg-green-500/20 group-hover:border-green-400/30' : 
-                      'bg-orange-500/10 text-orange-300 border-orange-500/20 group-hover:bg-orange-500/20 group-hover:border-orange-400/30'}`}
+                    ${item.color === 'blue' ? 'bg-blue-500/10 text-blue-300 border-blue-500/20 group-hover:bg-blue-500/20 group-hover:border-blue-400/30' :
+                      item.color === 'purple' ? 'bg-purple-500/10 text-purple-300 border-purple-500/20 group-hover:bg-purple-500/20 group-hover:border-purple-400/30' :
+                        item.color === 'green' ? 'bg-green-500/10 text-green-300 border-green-500/20 group-hover:bg-green-500/20 group-hover:border-green-400/30' :
+                          'bg-orange-500/10 text-orange-300 border-orange-500/20 group-hover:bg-orange-500/20 group-hover:border-orange-400/30'}`}
                 >
                   {skill}
                 </span>
@@ -257,7 +257,7 @@ const projects = [
 const Projects = () => {
   return (
     <section id="projects" className="py-24 px-6 w-full max-w-7xl mx-auto">
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
@@ -266,7 +266,7 @@ const Projects = () => {
         <h2 className="text-3xl md:text-5xl font-bold mb-4">Featured <span className="text-neon-purple">Works</span></h2>
         <p className="text-slate-400 max-w-2xl">Showcasing complex implementations across web development, AI, and data analytics.</p>
       </motion.div>
-      
+
       <div className="grid lg:grid-cols-3 gap-8">
         {projects.map((proj, i) => (
           <motion.div
@@ -277,9 +277,9 @@ const Projects = () => {
             whileHover={{ y: -10 }}
             transition={{ duration: 0.3 }}
             className={`glass-panel p-1 rounded-[24px] overflow-hidden group glass-panel-hover
-              ${proj.glow === 'blue' ? 'hover:border-blue-500/40' : 
-                proj.glow === 'purple' ? 'hover:border-purple-500/40' : 
-                'hover:border-green-500/40'}`}
+              ${proj.glow === 'blue' ? 'hover:border-blue-500/40' :
+                proj.glow === 'purple' ? 'hover:border-purple-500/40' :
+                  'hover:border-green-500/40'}`}
           >
             <div className="bg-[#050511]/80 backdrop-blur-xl h-full p-8 rounded-[22px] flex flex-col relative">
               <div className="flex justify-between items-start mb-6">
@@ -288,20 +288,20 @@ const Projects = () => {
                   <ExternalLink size={16} className="text-slate-300" />
                 </a>
               </div>
-              
+
               <h3 className="text-2xl font-bold mb-4 group-hover:text-blue-300 transition-colors">{proj.title}</h3>
               <p className="text-slate-400 text-sm leading-relaxed mb-6">{proj.desc}</p>
-              
+
               <div className="mb-6">
                 <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mb-3">Technologies Used</h4>
                 <div className="flex flex-wrap gap-2">
                   {proj.techStack.map((tag, j) => (
-                    <span 
-                      key={j} 
+                    <span
+                      key={j}
                       className={`text-[9px] font-bold px-2 py-1 rounded-md uppercase tracking-wider border transition-all duration-300
-                        ${proj.glow === 'blue' ? 'bg-blue-500/10 text-blue-300 border-blue-500/20 group-hover:bg-blue-500/20 group-hover:border-blue-400/30' : 
-                          proj.glow === 'purple' ? 'bg-purple-500/10 text-purple-300 border-purple-500/20 group-hover:bg-purple-500/20 group-hover:border-purple-400/30' : 
-                          'bg-green-500/10 text-green-300 border-green-500/20 group-hover:bg-green-500/20 group-hover:border-green-400/30'}`}
+                        ${proj.glow === 'blue' ? 'bg-blue-500/10 text-blue-300 border-blue-500/20 group-hover:bg-blue-500/20 group-hover:border-blue-400/30' :
+                          proj.glow === 'purple' ? 'bg-purple-500/10 text-purple-300 border-purple-500/20 group-hover:bg-purple-500/20 group-hover:border-purple-400/30' :
+                            'bg-green-500/10 text-green-300 border-green-500/20 group-hover:bg-green-500/20 group-hover:border-green-400/30'}`}
                     >
                       {tag}
                     </span>
@@ -319,7 +319,7 @@ const Projects = () => {
 const Experience = () => {
   return (
     <section id="experience" className="py-24 px-6 w-full max-w-4xl mx-auto">
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
@@ -329,9 +329,9 @@ const Experience = () => {
       </motion.div>
 
       <div className="relative border-l border-purple-500/30 ml-4 md:ml-1/2 space-y-12 pb-8">
-        
+
         {/* Timeline Item 1 */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, x: -20 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
@@ -351,7 +351,7 @@ const Experience = () => {
         </motion.div>
 
         {/* Timeline Item 2 */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, x: 20 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
@@ -379,8 +379,8 @@ const Contact = () => {
   return (
     <section id="contact" className="py-24 px-6 w-full mt-12 bg-gradient-to-t from-blue-900/10 to-transparent border-t border-white/5">
       <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
-        
-        <motion.div 
+
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -389,7 +389,7 @@ const Contact = () => {
           <p className="text-slate-400 mb-8 max-w-md text-lg">
             Whether you have a question, a project idea, or just want to explore tech, my inbox is always open.
           </p>
-          
+
           <div className="flex flex-col gap-4">
             <a href="mailto:afrizalrafli27@gmail.com" className="flex items-center gap-4 text-slate-300 hover:text-white transition-colors group">
               <div className="p-3 bg-white/5 rounded-full group-hover:bg-blue-500/20 group-hover:text-blue-400 transition-colors">
@@ -404,7 +404,7 @@ const Contact = () => {
               Available for Full-Time & Freelance
             </div>
           </div>
-          
+
           {/* Dock style socials */}
           <div className="mt-12 h-16 inline-flex items-center px-10 dock-pill rounded-full justify-center">
             <div className="flex gap-8 items-center">
@@ -423,7 +423,7 @@ const Contact = () => {
         </motion.div>
 
         {/* Terminal Contact Form */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, x: 20 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
@@ -438,36 +438,36 @@ const Contact = () => {
               <Terminal size={12} /> guest@afrizal-portfolio:~
             </span>
           </div>
-          
+
           <div className="p-6 font-mono">
             <div className="text-blue-400 mb-4 text-sm">$ ./send_message.sh</div>
-            
+
             <form className="flex flex-col gap-4" onSubmit={(e) => e.preventDefault()}>
               <div className="flex flex-col gap-1">
                 <label className="text-xs text-slate-400 uppercase tracking-widest">Name</label>
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   className="bg-transparent border-b border-slate-700 focus:border-blue-500 outline-none py-2 text-white placeholder:text-slate-600 transition-colors text-sm"
                   placeholder="John Doe"
                 />
               </div>
               <div className="flex flex-col gap-1">
                 <label className="text-xs text-slate-400 uppercase tracking-widest">Email</label>
-                <input 
-                  type="email" 
+                <input
+                  type="email"
                   className="bg-transparent border-b border-slate-700 focus:border-purple-500 outline-none py-2 text-white placeholder:text-slate-600 transition-colors text-sm"
                   placeholder="john@example.com"
                 />
               </div>
               <div className="flex flex-col gap-1 mt-2">
                 <label className="text-xs text-slate-400 uppercase tracking-widest">Message</label>
-                <textarea 
+                <textarea
                   rows={4}
                   className="bg-transparent border border-slate-700 rounded-lg p-3 text-white focus:border-blue-500 outline-none resize-none placeholder:text-slate-600 focus:bg-white/5 transition-all text-sm mt-1"
                   placeholder="Type your message here..."
                 />
               </div>
-              
+
               <button className="mt-4 flex items-center justify-center gap-2 bg-slate-100 text-slate-900 py-3 rounded-lg font-bold hover:bg-white transition-colors">
                 Execute <Send size={16} />
               </button>
@@ -476,7 +476,7 @@ const Contact = () => {
         </motion.div>
 
       </div>
-      
+
       <div className="max-w-7xl mx-auto mt-24 pt-8 border-t border-white/5 text-center flex flex-col md:flex-row items-center justify-between gap-4 text-slate-500 text-sm">
         <p>&copy; 2026 Afrizal Rafli. All rights reserved.</p>
         <p className="flex items-center gap-2">
