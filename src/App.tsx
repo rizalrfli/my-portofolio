@@ -3,7 +3,7 @@ import { motion, useScroll, useTransform } from 'motion/react';
 import {
   Code2, Database, Network, LineChart, Terminal,
   Server, BrainCircuit, Monitor, ChevronRight,
-  Github, Linkedin, Mail, ExternalLink, Calendar, Send
+  Github, Linkedin, Mail, ExternalLink, Calendar, Send, Instagram, MessageSquare, Palette
 } from 'lucide-react';
 
 const BackgroundElements = () => {
@@ -145,30 +145,37 @@ const strengths = [
   {
     title: "Full-Stack Web Dev",
     icon: <Monitor className="text-blue-400 mb-4" size={32} />,
-    desc: "Specializing in PHP, Laravel, and Filament 3 for robust enterprise applications.",
-    skills: ["PHP", "Laravel", "Filament 3", "React"],
+    desc: "Specializing in PHP, Laravel, and Filament for robust enterprise applications.",
+    skills: ["PHP", "Laravel", "Filament", "React", "Tailwind"],
     color: "blue"
   },
   {
     title: "Database Architecture",
     icon: <Database className="text-purple-400 mb-4" size={32} />,
     desc: "Mastery in SQL and PostgreSQL including Transactions, Stored Procedures, and Materialized Views.",
-    skills: ["PostgreSQL", "SQL", "Redis"],
+    skills: ["PostgreSQL", "SQL"],
     color: "purple"
   },
   {
     title: "Data Science & Analytics",
     icon: <BrainCircuit className="text-green-400 mb-4" size={32} />,
     desc: "Proficient in Python, Pandas, and statistical modeling with Random Forest Regression.",
-    skills: ["Python", "Pandas", "Scikit-Learn"],
+    skills: ["Python", "Pandas"],
     color: "green"
   },
   {
     title: "Infrastructure & Networking",
     icon: <Network className="text-orange-400 mb-4" size={32} />,
     desc: "Experience in Linux system administration and complex networking simulations using GNS3.",
-    skills: ["Linux", "GNS3", "Docker"],
+    skills: ["Linux", "GNS3", "Docker", "Cisco"],
     color: "orange"
+  },
+  {
+    title: "Graphic Design",
+    icon: <Palette className="text-pink-400 mb-4" size={32} />,
+    desc: "Crafting visually compelling designs and user interfaces with modern creative tools.",
+    skills: ["Canva", "Figma", "Affinity"],
+    color: "pink"
   }
 ];
 
@@ -198,7 +205,8 @@ const About = () => {
               ${item.color === 'blue' ? 'hover:glow-border' :
                 item.color === 'purple' ? 'hover:glow-border-purple' :
                   item.color === 'green' ? 'hover:border-green-500/30' :
-                    'hover:border-orange-500/30'}`}
+                    item.color === 'pink' ? 'hover:border-pink-500/30' :
+                      'hover:border-orange-500/30'}`}
           >
             <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl rounded-bl-full opacity-0 group-hover:opacity-20 transition-opacity
               ${item.color === 'blue' ? 'from-blue-500' :
@@ -217,7 +225,8 @@ const About = () => {
                     ${item.color === 'blue' ? 'bg-blue-500/10 text-blue-300 border-blue-500/20 group-hover:bg-blue-500/20 group-hover:border-blue-400/30' :
                       item.color === 'purple' ? 'bg-purple-500/10 text-purple-300 border-purple-500/20 group-hover:bg-purple-500/20 group-hover:border-purple-400/30' :
                         item.color === 'green' ? 'bg-green-500/10 text-green-300 border-green-500/20 group-hover:bg-green-500/20 group-hover:border-green-400/30' :
-                          'bg-orange-500/10 text-orange-300 border-orange-500/20 group-hover:bg-orange-500/20 group-hover:border-orange-400/30'}`}
+                          item.color === 'pink' ? 'bg-pink-500/10 text-pink-300 border-pink-500/20 group-hover:bg-pink-500/20 group-hover:border-pink-400/30' :
+                            'bg-orange-500/10 text-orange-300 border-orange-500/20 group-hover:bg-orange-500/20 group-hover:border-orange-400/30'}`}
                 >
                   {skill}
                 </span>
@@ -235,7 +244,7 @@ const projects = [
     title: "Building Material Store Inventory System",
     type: "Full-Stack Application",
     desc: "A comprehensive full-stack application featuring robust stock control, secure authentication, and WhatsApp checkout integration.",
-    techStack: ["React", "Laravel", "Filament 3", "PostgreSQL", "WhatsApp API", "Tailwind CSS"],
+    techStack: ["React", "Laravel", "Filament", "PostgreSQL", "WhatsApp API", "Tailwind CSS"],
     glow: "blue"
   },
   {
@@ -316,60 +325,122 @@ const Projects = () => {
   );
 };
 
+const experiences = [
+  {
+    year: "2025 - 2026",
+    role: "Leadership & Project Management",
+    items: [
+      "Wakil Ketua Umum - Polinema Mengajar",
+      "Volunteer Photographer - Tlatah Lereng Gunung Arjuno",
+      "Project Manager - Lab Software Engineering Website (Polinema JTI)",
+      "Builder - Toko Bangunan Cahaya Baru Website"
+    ],
+    color: "text-blue-400",
+    glow: "bg-[#3b82f6] shadow-[0_0_8px_#3b82f6]"
+  },
+  {
+    year: "2024 - 2025",
+    role: "Graphic Design & Event Photography",
+    items: [
+      "Wakil Koordinator Design Graphic - Polinema Mengajar",
+      "Photographer - Banyuwangi Ethno Carnival"
+    ],
+    color: "text-purple-400",
+    glow: "bg-[#c084fc] shadow-[0_0_8px_#c084fc]"
+  },
+  {
+    year: "2023 - 2024",
+    role: "Technical & Data Internships",
+    items: [
+      "Network Administrator & Technician - Asterix Computer",
+      "Data Entry Staff - Peruri Bulog Indonesia"
+    ],
+    color: "text-green-400",
+    glow: "bg-[#22c55e] shadow-[0_0_8px_#22c55e]"
+  }
+];
+
 const Experience = () => {
   return (
-    <section id="experience" className="py-24 px-6 w-full max-w-4xl mx-auto">
+    <section id="experience" className="py-24 px-6 w-full max-w-5xl mx-auto overflow-hidden">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="text-center mb-16"
+        className="text-center mb-20"
       >
-        <h2 className="text-3xl md:text-5xl font-bold mb-4">Journey & <span className="text-neon-purple">Experience</span></h2>
+        <div className="inline-block px-4 py-1.5 mb-4 rounded-full border border-purple-500/30 bg-purple-500/10 text-purple-400 text-xs font-bold uppercase tracking-widest">
+          Career Path
+        </div>
+        <h2 className="text-4xl md:text-6xl font-bold mb-6">Journey & <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">Experience</span></h2>
+        <p className="text-slate-400 max-w-2xl mx-auto text-lg">A chronicle of my evolution as a developer, leader, and creative professional.</p>
       </motion.div>
 
-      <div className="relative border-l border-purple-500/30 ml-4 md:ml-1/2 space-y-12 pb-8">
+      <div className="relative">
+        {/* Central Vertical Line - Gradient */}
+        <div className="absolute left-4 md:left-1/2 md:-ml-[1px] top-0 bottom-0 w-[2px] bg-gradient-to-b from-blue-500 via-purple-500 to-transparent opacity-20" />
 
-        {/* Timeline Item 1 */}
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          className="relative pl-8 md:pl-0"
-        >
-          <div className="md:w-1/2 md:-ml-[0.5px] md:pr-12 md:text-right relative z-10">
-            <div className="absolute left-[-37.5px] md:right-[-4.5px] md:left-auto top-6 w-[9px] h-[9px] rounded-full bg-[#c084fc] shadow-[0_0_8px_#c084fc]" />
-            <div className="glass-panel p-6 glass-panel-hover">
-              <span className="text-blue-400 font-mono text-sm mb-2 block flex items-center md:justify-end gap-2">
-                <Calendar size={14} /> 2026
-              </span>
-              <h3 className="text-xl font-bold text-white mb-2">Google Student Ambassador</h3>
-              <h4 className="text-slate-300 font-medium mb-3">Candidate, 2026 Batch</h4>
-              <p className="text-slate-400 text-sm">Active participation and rigorous selection process for the GSA program, advocating for Google technologies and leading student developer communities.</p>
-            </div>
-          </div>
-        </motion.div>
+        <div className="space-y-16 relative">
+          {experiences.map((exp, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
+              className={`relative flex items-center ${index % 2 === 0 ? 'md:flex-row-reverse' : 'md:flex-row'}`}
+            >
+              {/* Timeline Dot with Outer Ring */}
+              <div className="absolute left-4 md:left-1/2 md:-translate-x-1/2 flex items-center justify-center z-20">
+                <div className={`w-4 h-4 rounded-full ${exp.glow} z-10 relative`} />
+                <div className={`absolute w-8 h-8 rounded-full ${exp.glow.replace('bg-', 'bg-').split(' ')[0]}/20 animate-ping`} />
+                <div className="absolute w-10 h-10 rounded-full border border-white/5 bg-slate-900/50 backdrop-blur-sm" />
+              </div>
 
-        {/* Timeline Item 2 */}
-        <motion.div
-          initial={{ opacity: 0, x: 20 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          className="relative pl-8 md:pl-0 flex justify-end"
-        >
-          <div className="md:w-1/2 md:pl-12 relative z-10 w-full">
-            <div className="absolute left-[-37.5px] top-6 w-[9px] h-[9px] rounded-full bg-[#c084fc] shadow-[0_0_8px_#c084fc]" />
-            <div className="glass-panel p-6 glass-panel-hover">
-              <span className="text-purple-400 font-mono text-sm mb-2 block flex items-center gap-2">
-                <Calendar size={14} /> Present
-              </span>
-              <h3 className="text-xl font-bold text-white mb-2">PKL (Internship Program) Preparation</h3>
-              <h4 className="text-slate-300 font-medium mb-3">Politeknik Negeri Malang</h4>
-              <p className="text-slate-400 text-sm">Focusing on enterprise-level software solutions, refining skills in Laravel, PostgreSQL, and Data Science methodologies to prepare for professional deployment.</p>
-            </div>
-          </div>
-        </motion.div>
+              {/* Content Card */}
+              <div className={`w-full md:w-[45%] ml-12 md:ml-0 ${index % 2 === 0 ? 'md:pl-12' : 'md:pr-12'}`}>
+                <motion.div
+                  whileHover={{ y: -5, scale: 1.01 }}
+                  className="glass-panel p-8 relative group transition-all duration-300 hover:border-purple-500/30"
+                >
+                  {/* Subtle Background Glow */}
+                  <div className={`absolute -inset-px rounded-[24px] bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity -z-10`} />
 
+                  <div className="flex flex-col gap-4">
+                    <div className={`flex items-center gap-3 ${exp.color}`}>
+                      <Calendar size={16} />
+                      <span className="font-mono text-sm font-bold tracking-wider">{exp.year}</span>
+                    </div>
+
+                    <div>
+                      <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-blue-300 group-hover:to-purple-300 transition-all duration-300">
+                        {exp.role}
+                      </h3>
+                    </div>
+
+                    <ul className="space-y-4 mt-2">
+                      {exp.items.map((item, i) => (
+                        <li key={i} className="flex items-start gap-3 group/item">
+                          <div className={`mt-1.5 w-1.5 h-1.5 rounded-full shrink-0 ${exp.color.replace('text', 'bg')} opacity-40 group-hover/item:opacity-100 group-hover/item:scale-125 transition-all`} />
+                          <span className="text-slate-400 text-sm leading-relaxed group-hover/item:text-slate-200 transition-colors">
+                            {item}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </motion.div>
+              </div>
+
+              {/* Year Indicator for Desktop (Opposite side of card) */}
+              <div className={`hidden md:flex w-[45%] ${index % 2 === 0 ? 'justify-start pr-12' : 'justify-end pl-12'}`}>
+                <div className="text-slate-600 font-bold text-4xl opacity-20 pointer-events-none select-none">
+                  {exp.year.split(' ')[0]}
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -406,17 +477,23 @@ const Contact = () => {
           </div>
 
           {/* Dock style socials */}
-          <div className="mt-12 h-16 inline-flex items-center px-10 dock-pill rounded-full justify-center">
-            <div className="flex gap-8 items-center">
-              <a href="#" className="text-xs text-white opacity-60 hover:opacity-100 transition-opacity font-bold uppercase tracking-wider">
-                GitHub
+          <div className="mt-12 h-16 inline-flex items-center px-8 dock-pill rounded-full justify-center">
+            <div className="flex gap-6 items-center">
+              <a href="https://github.com/rizalrfli" target="_blank" rel="noopener noreferrer" className="p-2 text-white/60 hover:text-white hover:scale-110 transition-all">
+                <Github size={20} />
               </a>
-              <a href="#" className="text-xs text-white opacity-60 hover:opacity-100 transition-opacity font-bold uppercase tracking-wider">
-                LinkedIn
+              <a href="https://www.linkedin.com/in/afrizalrafli" target="_blank" rel="noopener noreferrer" className="p-2 text-white/60 hover:text-white hover:scale-110 transition-all">
+                <Linkedin size={20} />
               </a>
-              <div className="w-[1px] h-5 bg-white/20" />
+              <a href="https://www.instagram.com/afrzalrfli/" target="_blank" rel="noopener noreferrer" className="p-2 text-white/60 hover:text-white hover:scale-110 transition-all">
+                <Instagram size={20} />
+              </a>
+              <a href="https://wa.me/083834079959" target="_blank" rel="noopener noreferrer" className="p-2 text-white/60 hover:text-white hover:scale-110 transition-all">
+                <MessageSquare size={20} />
+              </a>
+              <div className="w-[1px] h-5 bg-white/20 ml-2" />
               <div className="flex items-center gap-2">
-                <span className="text-xs font-mono text-neon-blue">terminal: guest@afrizal ~ $</span>
+                <span className="text-[10px] font-mono text-neon-blue opacity-80">afrizal@portfolio</span>
               </div>
             </div>
           </div>
