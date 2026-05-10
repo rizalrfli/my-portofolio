@@ -278,12 +278,12 @@ const projects = [
     link: "https://rizalrfli.github.io/agrovision-ai/"
   },
   {
-    title: "AI-Driven Image & 3D Design Mod",
+    title: "Analisis Kesehatan Mental Remaja",
     type: "AI / Data Science",
-    desc: "Utilizing AI tools for facial expression manipulation, background removal, and converting 2D clothing designs into 3D models.",
-    techStack: ["Python", "OpenCV", "PyTorch", "Blender API", "Computer Vision"],
+    desc: "Menganalisis faktor-faktor yang mempengaruhi kesehatan mental remaja, khususnya tingkat depresi, berdasarkan data aktivitas digital dan pola hidup menggunakan Random Forest.",
+    techStack: ["Python", "Pandas", "NumPy", "Matplotlib", "Seaborn", "Scikit-Learn"],
     glow: "purple",
-    link: "#"
+    link: "https://github.com/rizalrfli/Analisis-Mental-Health-Remaja"
   },
   {
     title: "Data-Driven Statistical Analysis",
