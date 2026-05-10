@@ -3,7 +3,7 @@ import { motion, useScroll, useTransform } from 'motion/react';
 import {
   Code2, Database, Network, LineChart, Terminal,
   Server, BrainCircuit, Monitor, ChevronRight,
-  Github, Linkedin, Mail, ExternalLink, Calendar, Send, Instagram, MessageSquare, Palette
+  Github, Linkedin, Mail, ExternalLink, Calendar, Send, Instagram, MessageSquare, Palette, Menu, X, Trophy
 } from 'lucide-react';
 
 const BackgroundElements = () => {
@@ -38,6 +38,7 @@ const BackgroundElements = () => {
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -46,19 +47,45 @@ const Navbar = () => {
   }, []);
 
   return (
-    <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-[#03030a]/80 backdrop-blur-md border-b border-white/10' : 'bg-transparent'}`}>
+    <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled || isOpen ? 'bg-[#03030a]/80 backdrop-blur-md border-b border-white/10' : 'bg-transparent'}`}>
       <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
         <div className="font-bold text-xl tracking-tighter">
           <span className="text-white">Afrizal</span>
-          <span className="text-neon-blue">.dev</span>
+          <span className="text-neon-blue">Rafli</span>
         </div>
+
+        {/* Desktop Menu */}
         <div className="hidden md:flex gap-8 text-sm font-medium text-slate-300">
           <a href="#about" className="hover:text-blue-400 transition-colors">About</a>
           <a href="#projects" className="hover:text-blue-400 transition-colors">Projects</a>
           <a href="#experience" className="hover:text-blue-400 transition-colors">Experience</a>
+          <a href="#achievements" className="hover:text-blue-400 transition-colors">Achievements</a>
           <a href="#contact" className="hover:text-blue-400 transition-colors">Contact</a>
         </div>
+
+        {/* Mobile Menu Toggle */}
+        <button
+          className="md:hidden text-white p-2"
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          {isOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
       </div>
+
+      {/* Mobile Menu Overlay */}
+      {isOpen && (
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="md:hidden bg-[#03030a]/95 backdrop-blur-xl border-b border-white/10 px-6 py-8 flex flex-col gap-6"
+        >
+          <a href="#about" onClick={() => setIsOpen(false)} className="text-lg font-medium text-slate-300 hover:text-blue-400 transition-colors">About</a>
+          <a href="#projects" onClick={() => setIsOpen(false)} className="text-lg font-medium text-slate-300 hover:text-blue-400 transition-colors">Projects</a>
+          <a href="#experience" onClick={() => setIsOpen(false)} className="text-lg font-medium text-slate-300 hover:text-blue-400 transition-colors">Experience</a>
+          <a href="#achievements" onClick={() => setIsOpen(false)} className="text-lg font-medium text-slate-300 hover:text-blue-400 transition-colors">Achievements</a>
+          <a href="#contact" onClick={() => setIsOpen(false)} className="text-lg font-medium text-slate-300 hover:text-blue-400 transition-colors">Contact</a>
+        </motion.div>
+      )}
     </nav>
   );
 };
@@ -71,40 +98,40 @@ const Hero = () => {
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8 }}
-          className="flex flex-col gap-6"
+          className="flex flex-col gap-6 items-center lg:items-start"
         >
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full badge-neon-blue w-fit">
             <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
             <span className="text-xs font-bold text-neon-blue uppercase tracking-wider">Programmer</span>
           </div>
 
-          <h1 className="text-5xl lg:text-7xl font-bold leading-tight tracking-tight">
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight tracking-tight text-center lg:text-left">
             Hi, I'm <span className="text-white">Afrizal Rafli</span>
           </h1>
 
-          <h2 className="text-xl lg:text-2xl text-slate-300 font-medium opacity-80 mt-2">
+          <h2 className="text-xl lg:text-2xl text-slate-300 font-medium opacity-80 mt-2 text-center lg:text-left">
             Full-Stack Developer <br className="hidden lg:block" /> & Data Science Enthusiast
           </h2>
 
-          <p className="text-slate-400 max-w-lg mt-4">
+          <p className="text-slate-400 max-w-lg mt-4 text-center lg:text-left">
             A passionate student at Politeknik Negeri Malang (Polinema), crafting futuristic web experiences and analyzing complex data.
           </p>
 
-          <div className="flex flex-wrap gap-4 mt-6">
-            <a href="#projects" className="px-6 py-2.5 rounded-[16px] glass-panel text-neon-blue font-semibold hover:bg-white/5 transition-all flex items-center gap-2 hover:-translate-y-1">
-              View My Work <ChevronRight size={18} />
-            </a>
-            <a href="#contact" className="px-6 py-2.5 rounded-[16px] font-semibold text-slate-300 hover:text-white bg-transparent transition-colors">
-              Contact Me
-            </a>
-          </div>
+            <div className="flex flex-col sm:flex-row justify-center lg:justify-start gap-4 mt-6 w-full sm:w-auto">
+              <a href="#projects" className="px-6 py-2.5 rounded-[16px] glass-panel text-neon-blue font-semibold hover:bg-white/5 transition-all flex items-center justify-center gap-2 hover:-translate-y-1">
+                View My Work <ChevronRight size={18} />
+              </a>
+              <a href="#contact" className="px-6 py-2.5 rounded-[16px] font-semibold text-slate-300 hover:text-white bg-transparent transition-colors flex items-center justify-center">
+                Contact Me
+              </a>
+            </div>
         </motion.div>
 
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1 }}
-          className="relative h-[400px] lg:h-[600px] hidden md:block"
+          className="relative h-[320px] md:h-[400px] lg:h-[600px] order-first lg:order-none flex justify-center items-center"
         >
           {/* Abstract 3D/Tech representation */}
           <motion.div
@@ -146,7 +173,7 @@ const strengths = [
     title: "Full-Stack Web Dev",
     icon: <Monitor className="text-blue-400 mb-4" size={32} />,
     desc: "Specializing in PHP, Laravel, and Filament for robust enterprise applications.",
-    skills: ["PHP", "Laravel", "Filament", "React", "Tailwind"],
+    skills: ["PHP", "Laravel", "Filament", "React", "Tailwind", "Flutter"],
     color: "blue"
   },
   {
@@ -212,7 +239,8 @@ const About = () => {
               ${item.color === 'blue' ? 'from-blue-500' :
                 item.color === 'purple' ? 'from-purple-500' :
                   item.color === 'green' ? 'from-green-500' :
-                    'from-orange-500'}`}
+                    item.color === 'pink' ? 'from-pink-500' :
+                      'from-orange-500'}`}
             />
             {item.icon}
             <h3 className="text-xl font-bold mb-3">{item.title}</h3>
@@ -241,25 +269,28 @@ const About = () => {
 
 const projects = [
   {
-    title: "Building Material Store Inventory System",
-    type: "Full-Stack Application",
-    desc: "A comprehensive full-stack application featuring robust stock control, secure authentication, and WhatsApp checkout integration.",
-    techStack: ["React", "Laravel", "Filament", "PostgreSQL", "WhatsApp API", "Tailwind CSS"],
-    glow: "blue"
+    title: "Agro-Vision AI",
+    type: "Sustainable Farming Management System",
+    desc: "Platform solusi pintar untuk membantu petani mencapai panen optimal melalui diagnosis penyakit tanaman berbasis AI, panduan kalender tanam, dan saran tindakan preventif organik.",
+    techStack: ["React", "Tailwind CSS", "Gemini AI", "Weather API", "Vite"],
+    glow: "blue",
+    link: "https://rizalrfli.github.io/agrovision-ai/"
   },
   {
     title: "AI-Driven Image & 3D Design Mod",
     type: "AI / Data Science",
     desc: "Utilizing AI tools for facial expression manipulation, background removal, and converting 2D clothing designs into 3D models.",
     techStack: ["Python", "OpenCV", "PyTorch", "Blender API", "Computer Vision"],
-    glow: "purple"
+    glow: "purple",
+    link: "#"
   },
   {
     title: "Data-Driven Statistical Analysis",
     type: "Analytics",
     desc: "Academic and practical implementations of normal distribution analysis and complex data calculations using Random Forest.",
     techStack: ["NumPy", "Pandas", "Scikit-Learn", "Matplotlib", "Statistics"],
-    glow: "green"
+    glow: "green",
+    link: "#"
   }
 ];
 
@@ -285,7 +316,8 @@ const Projects = () => {
             viewport={{ once: true }}
             whileHover={{ y: -10 }}
             transition={{ duration: 0.3 }}
-            className={`glass-panel p-1 rounded-[24px] overflow-hidden group glass-panel-hover
+            onClick={() => proj.link !== '#' && window.open(proj.link, '_blank')}
+            className={`glass-panel p-1 rounded-[24px] overflow-hidden group glass-panel-hover cursor-pointer
               ${proj.glow === 'blue' ? 'hover:border-blue-500/40' :
                 proj.glow === 'purple' ? 'hover:border-purple-500/40' :
                   'hover:border-green-500/40'}`}
@@ -293,9 +325,9 @@ const Projects = () => {
             <div className="bg-[#050511]/80 backdrop-blur-xl h-full p-8 rounded-[22px] flex flex-col relative">
               <div className="flex justify-between items-start mb-6">
                 <span className="text-xs font-mono text-slate-500 uppercase tracking-wider">{proj.type}</span>
-                <a href="#" className="p-2 bg-white/5 rounded-full hover:bg-white/10 transition-colors">
+                <div className="p-2 bg-white/5 rounded-full hover:bg-white/10 transition-colors">
                   <ExternalLink size={16} className="text-slate-300" />
-                </a>
+                </div>
               </div>
 
               <h3 className="text-2xl font-bold mb-4 group-hover:text-blue-300 transition-colors">{proj.title}</h3>
@@ -446,6 +478,84 @@ const Experience = () => {
   );
 };
 
+const achievements = [
+  {
+    title: "MikroTik Certified Network Associate",
+    issuer: "MikroTik",
+    date: "April 2024",
+    image: "/Achievment/1743133379367.jpg",
+    glow: "blue"
+  },
+  {
+    title: "Belajar Dasar AI",
+    issuer: "Dicoding Academy",
+    date: "September 2025",
+    image: "/Achievment/1759060763412.jpg",
+    glow: "purple"
+  },
+  {
+    title: "Wakil Koordinator Desain Grafis 2",
+    issuer: "Polinema Mengajar",
+    date: "Desember 2025",
+    image: "/Achievment/1768038217665.jpg",
+    glow: "green"
+  },
+  {
+    title: "Juara 3 Poster Competition Open Air",
+    issuer: "UKM Radio Kampus Politeknik FM",
+    date: "Oktober 2025",
+    image: "/Achievment/1768038591677.jpg",
+    glow: "pink"
+  }
+];
+
+const Achievements = () => {
+  return (
+    <section id="achievements" className="py-24 px-6 w-full max-w-7xl mx-auto">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        className="mb-16 text-center md:text-left"
+      >
+        <h2 className="text-3xl md:text-5xl font-bold mb-4">Honors & <span className="text-neon-blue">Achievements</span></h2>
+        <p className="text-slate-400 max-w-2xl mx-auto md:mx-0">Recognition of my dedication, skills, and continuous learning journey.</p>
+      </motion.div>
+
+      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {achievements.map((achieve, i) => (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: i * 0.1 }}
+            whileHover={{ y: -5 }}
+            className={`glass-panel p-1 rounded-[20px] overflow-hidden group glass-panel-hover
+              ${achieve.glow === 'blue' ? 'hover:border-blue-500/40' :
+                achieve.glow === 'purple' ? 'hover:border-purple-500/40' :
+                  achieve.glow === 'green' ? 'hover:border-green-500/40' :
+                    'hover:border-pink-500/40'}`}
+          >
+            <div className="bg-[#050511]/80 backdrop-blur-xl h-full p-5 rounded-[18px] flex flex-col relative">
+              <div className="relative w-full h-48 sm:h-40 rounded-xl overflow-hidden mb-5 border border-white/5">
+                <img src={achieve.image} alt={achieve.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-80" />
+                <div className="absolute bottom-3 left-3 flex items-center gap-2">
+                  <Trophy size={14} className={achieve.glow === 'blue' ? 'text-blue-400' : achieve.glow === 'purple' ? 'text-purple-400' : achieve.glow === 'green' ? 'text-green-400' : 'text-pink-400'} />
+                  <span className="text-[10px] font-bold text-white uppercase tracking-wider">{achieve.date}</span>
+                </div>
+              </div>
+              <h3 className="text-lg font-bold mb-2 leading-tight group-hover:text-blue-300 transition-colors">{achieve.title}</h3>
+              <p className="text-slate-400 text-sm mt-auto">{achieve.issuer}</p>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+    </section>
+  );
+};
+
 const Contact = () => {
   return (
     <section id="contact" className="py-24 px-6 w-full mt-12 bg-gradient-to-t from-blue-900/10 to-transparent border-t border-white/5">
@@ -574,6 +684,7 @@ export default function App() {
         <About />
         <Projects />
         <Experience />
+        <Achievements />
         <Contact />
       </main>
     </div>
