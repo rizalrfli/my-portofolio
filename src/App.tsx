@@ -51,8 +51,8 @@ const Navbar = () => {
     <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled || isOpen ? 'bg-[#03030a]/80 backdrop-blur-md border-b border-white/10' : 'bg-transparent'}`}>
       <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
         <div className="font-bold text-xl tracking-tighter">
-          <span className="text-white">Afrizal</span>
-          <span className="text-neon-blue">Rafli</span>
+          <span className="text-white">Portofolio</span>
+          <span className="text-neon-blue ml-1">Afrizal</span>
         </div>
 
         {/* Desktop Menu */}
