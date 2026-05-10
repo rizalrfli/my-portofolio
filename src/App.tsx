@@ -5,6 +5,7 @@ import {
   Server, BrainCircuit, Monitor, ChevronRight,
   Github, Linkedin, Mail, ExternalLink, Calendar, Send, Instagram, MessageSquare, Palette, Menu, X, Trophy
 } from 'lucide-react';
+import { GitHubCalendar } from 'react-github-calendar';
 
 const BackgroundElements = () => {
   return (
@@ -357,6 +358,44 @@ const Projects = () => {
   );
 };
 
+const GithubActivity = () => {
+  return (
+    <section id="activity" className="py-24 px-6 w-full max-w-5xl mx-auto overflow-hidden">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        className="text-center mb-16"
+      >
+        <div className="inline-block px-4 py-1.5 mb-4 rounded-full border border-green-500/30 bg-green-500/10 text-green-400 text-xs font-bold uppercase tracking-widest">
+          Open Source
+        </div>
+        <h2 className="text-3xl md:text-5xl font-bold mb-4">GitHub <span style={{ textShadow: '0 0 10px rgba(34, 197, 94, 0.5)', color: '#4ade80' }}>Contributions</span></h2>
+        <p className="text-slate-400 max-w-2xl mx-auto text-lg">A visual representation of my coding activity and open-source contributions over the last year.</p>
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true }}
+        className="glass-panel p-6 md:p-10 rounded-[24px] overflow-hidden hover:border-green-500/30 transition-all duration-300"
+      >
+        <div className="w-full overflow-x-auto pb-4" style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgba(255,255,255,0.1) transparent' }}>
+          <div className="min-w-[800px] flex justify-center">
+            <GitHubCalendar 
+              username="rizalrfli" 
+              colorScheme="dark"
+              blockSize={14}
+              blockMargin={5}
+              fontSize={14}
+            />
+          </div>
+        </div>
+      </motion.div>
+    </section>
+  );
+};
+
 const experiences = [
   {
     year: "2025 - 2026",
@@ -683,6 +722,7 @@ export default function App() {
         <Hero />
         <About />
         <Projects />
+        <GithubActivity />
         <Experience />
         <Achievements />
         <Contact />
