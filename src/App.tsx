@@ -148,7 +148,7 @@ const Hero = () => {
               <div className="absolute inset-4 rounded-full border border-purple-500/30 animate-[spin_15s_linear_infinite_reverse]" />
               <div className="absolute inset-8 rounded-full border border-blue-400/20 animate-[spin_20s_linear_infinite]" />
               <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/10 to-purple-500/10 rounded-full backdrop-blur-sm flex items-center justify-center border border-white/5 overflow-hidden">
-                <img src="/424064945.jpg" alt="Afrizal Rafli" className="w-full h-full object-cover" />
+                <img src="./424064945.jpg" alt="Afrizal Rafli" className="w-full h-full object-cover" />
               </div>
 
               {/* Floating tech icons */}
@@ -522,28 +522,28 @@ const achievements = [
     title: "MikroTik Certified Network Associate",
     issuer: "MikroTik",
     date: "April 2024",
-    image: "/Achievment/1743133379367.jpg",
+    image: "./Achievment/1743133379367.jpg",
     glow: "blue"
   },
   {
     title: "Belajar Dasar AI",
     issuer: "Dicoding Academy",
     date: "September 2025",
-    image: "/Achievment/1759060763412.jpg",
+    image: "./Achievment/1759060763412.jpg",
     glow: "purple"
   },
   {
     title: "Wakil Koordinator Desain Grafis 2",
     issuer: "Polinema Mengajar",
     date: "Desember 2025",
-    image: "/Achievment/1768038217665.jpg",
+    image: "./Achievment/1768038217665.jpg",
     glow: "green"
   },
   {
     title: "Juara 3 Poster Competition Open Air",
     issuer: "UKM Radio Kampus Politeknik FM",
     date: "Oktober 2025",
-    image: "/Achievment/1768038591677.jpg",
+    image: "./Achievment/1768038591677.jpg",
     glow: "pink"
   }
 ];
