@@ -1,43 +1,145 @@
 import React, { useState, useEffect } from 'react';
-import { motion, useScroll, useTransform } from 'motion/react';
+import { motion, useReducedMotion } from 'motion/react';
 import {
-  Code2, Database, Network, LineChart, Terminal,
-  Server, BrainCircuit, Monitor, ChevronRight,
-  Github, Linkedin, Mail, ExternalLink, Calendar, Send, Instagram, MessageSquare, Palette, Menu, X, Trophy
+  ChevronRight,
+  Github, Linkedin, Mail, ExternalLink, Calendar, Instagram, MessageSquare, Menu, X, Trophy
 } from 'lucide-react';
 import { GitHubCalendar } from 'react-github-calendar';
 
-const BackgroundElements = () => {
+const Lamp = ({ on, onToggle }: { on: boolean; onToggle: () => void }) => {
+  const [pulling, setPulling] = useState(false);
+  const release = () => setPulling(false);
+
   return (
-    <div
-      className="fixed inset-0 z-[-1] overflow-hidden pointer-events-none"
-      style={{ background: 'radial-gradient(circle at 10% 10%, rgba(59,130,246,0.15) 0, transparent 40%), radial-gradient(circle at 90% 90%, rgba(168,85,247,0.15) 0, transparent 40%)' }}
-    >
-      {/* Floating particles */}
-      {[...Array(15)].map((_, i) => (
-        <motion.div
-          key={i}
-          className="absolute w-2 h-2 rounded-full bg-blue-400/30"
-          initial={{
-            x: Math.random() * window.innerWidth,
-            y: Math.random() * window.innerHeight,
-          }}
-          animate={{
-            y: [null, Math.random() * window.innerHeight],
-            x: [null, Math.random() * window.innerWidth],
-          }}
-          transition={{
-            duration: Math.random() * 20 + 20,
-            repeat: Infinity,
-            ease: "linear"
+    <div className="relative z-20 flex flex-col items-center">
+      <motion.div
+        aria-hidden
+        initial={false}
+        animate={{ opacity: on ? 1 : 0 }}
+        transition={{ duration: 0.6, ease: 'easeOut' }}
+        className="pointer-events-none absolute left-1/2 top-[4.6rem] h-80 w-80 -translate-x-1/2 -translate-y-1/2 rounded-full"
+        style={{
+          background:
+            'radial-gradient(circle, rgba(255, 226, 178, 0.34) 0%, rgba(255, 226, 178, 0.10) 42%, rgba(255, 226, 178, 0) 70%)',
+          filter: 'blur(16px)'
+        }}
+      />
+
+      <div aria-hidden className="h-9 w-px bg-[var(--line-strong)]" />
+
+      <div className="relative flex flex-col items-center">
+        <div
+          aria-hidden
+          className="h-3 w-10 bg-[var(--shade)]"
+          style={{ clipPath: 'polygon(26% 0, 74% 0, 100% 100%, 0 100%)' }}
+        />
+        <div
+          aria-hidden
+          className="-mt-1 h-5 w-5 rounded-full border transition-all duration-500"
+          style={{
+            borderColor: on ? 'var(--lamp)' : 'var(--line-strong)',
+            background: on ? 'var(--lamp)' : 'var(--chip)',
+            boxShadow: on ? '0 0 26px 8px rgba(255, 226, 178, 0.32)' : 'inset 0 -2px 3px rgba(0, 0, 0, 0.35)'
           }}
         />
-      ))}
+
+        <button
+          type="button"
+          onClick={onToggle}
+          onPointerDown={() => setPulling(true)}
+          onPointerUp={release}
+          onPointerLeave={release}
+          onPointerCancel={release}
+          onKeyDown={(event) => {
+            if (event.key === ' ' || event.key === 'Enter') setPulling(true);
+          }}
+          onKeyUp={release}
+          onBlur={release}
+          aria-pressed={on}
+          aria-label={on ? 'Turn the lights off' : 'Turn the lights on'}
+          className="absolute -right-7 top-1 flex h-14 w-11 flex-col items-center justify-start"
+        >
+          <motion.span
+            aria-hidden
+            initial={false}
+            animate={{ height: pulling ? 40 : 28 }}
+            transition={{ type: 'spring', stiffness: 520, damping: 26 }}
+            className="w-px"
+            style={{ background: 'var(--ink-faint)', boxShadow: '0 0 0 0.5px rgba(4, 10, 16, 0.25)' }}
+          />
+          <motion.span
+            aria-hidden
+            initial={false}
+            animate={{ y: pulling ? 10 : 0 }}
+            transition={{ type: 'spring', stiffness: 520, damping: 26 }}
+            className="mt-0.5 h-2.5 w-2.5 rounded-full"
+            style={{ background: 'var(--ink-faint)', boxShadow: '0 0 0 1px rgba(4, 10, 16, 0.25)' }}
+          />
+        </button>
+      </div>
     </div>
   );
 };
 
-const Navbar = () => {
+const Portrait = ({ lightsOn }: { lightsOn: boolean }) => {
+  const reduceMotion = useReducedMotion();
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+
+  const handleMove = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (reduceMotion) return;
+    const rect = event.currentTarget.getBoundingClientRect();
+    const px = (event.clientX - rect.left) / rect.width - 0.5;
+    const py = (event.clientY - rect.top) / rect.height - 0.5;
+    setTilt({ x: py * -7, y: px * 9 });
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 26, scale: 0.96 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ type: 'spring', stiffness: 90, damping: 16 }}
+      className="relative mt-5"
+    >
+      <motion.div
+        animate={{ rotateX: tilt.x, rotateY: tilt.y }}
+        transition={{ type: 'spring', stiffness: 150, damping: 18 }}
+        onMouseMove={handleMove}
+        onMouseLeave={() => setTilt({ x: 0, y: 0 })}
+        style={{ transformPerspective: 900 }}
+        className="relative w-52 h-64 sm:w-60 sm:h-72 md:w-72 md:h-[21rem] overflow-hidden rounded-t-[48%] rounded-b-2xl border border-[var(--line-strong)] bg-[var(--thumb)] shadow-[0_24px_60px_-30px_rgba(0,0,0,0.65)]"
+      >
+        <img
+          src="/FOTO 3X4.png"
+          alt="Afrizal Rafli"
+          className="w-full h-full object-cover object-top transition-[filter] duration-500"
+          style={{ filter: lightsOn ? 'brightness(1.04) saturate(1.02)' : 'brightness(0.92)' }}
+        />
+
+        {!reduceMotion && (
+          <motion.span
+            key={lightsOn ? 'sweep-on' : 'sweep-off'}
+            aria-hidden
+            initial={{ x: '-120%' }}
+            animate={{ x: '140%' }}
+            transition={{ duration: 1.1, ease: 'easeOut' }}
+            className="pointer-events-none absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+          />
+        )}
+
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background:
+              'linear-gradient(to top, rgba(6, 10, 16, 0.35) 0%, rgba(6, 10, 16, 0) 42%)'
+          }}
+        />
+      </motion.div>
+    </motion.div>
+  );
+};
+
+const Navbar = ({ lightsOn, onToggle }: { lightsOn: boolean; onToggle: () => void }) => {
   const [scrolled, setScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -47,123 +149,115 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const linkClass = 'min-h-11 flex items-center hover:text-[var(--accent)] transition-colors';
+
   return (
-    <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled || isOpen ? 'bg-[#03030a]/80 backdrop-blur-md border-b border-white/10' : 'bg-transparent'}`}>
-      <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-        <div className="font-bold text-xl tracking-tighter">
-          <span className="text-white">Portofolio</span>
-          <span className="text-neon-blue ml-1">Afrizal</span>
+    <nav
+      className={`fixed top-0 w-full z-50 transition-colors duration-300 border-b ${scrolled || isOpen
+        ? 'bg-[var(--page)] border-[var(--line)]'
+        : 'bg-transparent border-transparent'
+        }`}
+    >
+      <div className="max-w-6xl mx-auto px-5 md:px-8 min-h-20 flex items-center justify-between gap-4">
+        <a href="#home" className="font-display font-bold text-lg tracking-tight text-[var(--ink-strong)]" aria-label="Afrizal, kembali ke atas">
+          Afrizal Rafli
+        </a>
+
+        <div className="hidden md:flex items-center gap-8 text-sm font-medium text-[var(--ink)]">
+          <a href="#about" className={linkClass}>About</a>
+          <a href="#projects" className={linkClass}>Projects</a>
+          <a href="#experience" className={linkClass}>Experience</a>
+          <a href="#achievements" className={linkClass}>Achievements</a>
+          <a href="#contact" className={linkClass}>Contact</a>
+          <button
+            type="button"
+            onClick={onToggle}
+            aria-label={lightsOn ? 'Aktifkan mode gelap' : 'Aktifkan mode terang'}
+            className="min-w-11 min-h-11 flex items-center justify-center text-[var(--ink-muted)] hover:text-[var(--accent)] transition-colors"
+          >
+            {lightsOn ? 'Gelap' : 'Terang'}
+          </button>
         </div>
 
-        {/* Desktop Menu */}
-        <div className="hidden md:flex gap-8 text-sm font-medium text-slate-300">
-          <a href="#about" className="hover:text-blue-400 transition-colors">About</a>
-          <a href="#projects" className="hover:text-blue-400 transition-colors">Projects</a>
-          <a href="#experience" className="hover:text-blue-400 transition-colors">Experience</a>
-          <a href="#achievements" className="hover:text-blue-400 transition-colors">Achievements</a>
-          <a href="#contact" className="hover:text-blue-400 transition-colors">Contact</a>
+        <div className="flex md:hidden items-center gap-1">
+          <button
+            type="button"
+            onClick={onToggle}
+            aria-label={lightsOn ? 'Aktifkan mode gelap' : 'Aktifkan mode terang'}
+            className="min-w-11 min-h-11 flex items-center justify-center text-xs font-semibold text-[var(--ink-muted)]"
+          >
+            {lightsOn ? 'Gelap' : 'Terang'}
+          </button>
+          <button
+            aria-label={isOpen ? 'Tutup menu' : 'Buka menu'}
+            aria-expanded={isOpen}
+            className="text-[var(--ink-strong)] p-2 min-w-11 min-h-11 flex items-center justify-center"
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            {isOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
         </div>
-
-        {/* Mobile Menu Toggle */}
-        <button
-          className="md:hidden text-white p-2"
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          {isOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
       </div>
 
-      {/* Mobile Menu Overlay */}
       {isOpen && (
         <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="md:hidden bg-[#03030a]/95 backdrop-blur-xl border-b border-white/10 px-6 py-8 flex flex-col gap-6"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="md:hidden bg-[var(--page)] border-b border-[var(--line)] px-6 py-5 flex flex-col gap-2"
         >
-          <a href="#about" onClick={() => setIsOpen(false)} className="text-lg font-medium text-slate-300 hover:text-blue-400 transition-colors">About</a>
-          <a href="#projects" onClick={() => setIsOpen(false)} className="text-lg font-medium text-slate-300 hover:text-blue-400 transition-colors">Projects</a>
-          <a href="#experience" onClick={() => setIsOpen(false)} className="text-lg font-medium text-slate-300 hover:text-blue-400 transition-colors">Experience</a>
-          <a href="#achievements" onClick={() => setIsOpen(false)} className="text-lg font-medium text-slate-300 hover:text-blue-400 transition-colors">Achievements</a>
-          <a href="#contact" onClick={() => setIsOpen(false)} className="text-lg font-medium text-slate-300 hover:text-blue-400 transition-colors">Contact</a>
-        </motion.div>
+          <a href="#about" onClick={() => setIsOpen(false)} className={`text-lg font-medium text-[var(--ink)] ${linkClass}`}>About</a>
+          <a href="#projects" onClick={() => setIsOpen(false)} className={`text-lg font-medium text-[var(--ink)] ${linkClass}`}>Projects</a>
+          <a href="#experience" onClick={() => setIsOpen(false)} className={`text-lg font-medium text-[var(--ink)] ${linkClass}`}>Experience</a>
+          <a href="#achievements" onClick={() => setIsOpen(false)} className={`text-lg font-medium text-[var(--ink)] ${linkClass}`}>Achievements</a>
+          <a href="#contact" onClick={() => setIsOpen(false)} className={`text-lg font-medium text-[var(--ink)] ${linkClass}`}>Contact</a>        </motion.div>
       )}
     </nav>
   );
 };
 
-const Hero = () => {
+const Hero = ({ lightsOn, onToggle }: { lightsOn: boolean; onToggle: () => void }) => {
   return (
-    <section className="min-h-screen flex items-center relative pt-20 px-6">
-      <div className="max-w-7xl mx-auto w-full grid lg:grid-cols-2 gap-12 items-center">
+    <section id="home" className="lg:min-h-[90svh] flex items-center relative pt-28 md:pt-24 pb-16 px-5 md:px-8">
+      <div className="max-w-6xl mx-auto w-full grid lg:grid-cols-[1.1fr_.9fr] gap-10 lg:gap-20 items-center">
         <motion.div
-          initial={{ opacity: 0, x: -50 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8 }}
-          className="flex flex-col gap-6 items-center lg:items-start"
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45 }}
+          className="flex flex-col gap-5 items-center lg:items-start order-2 lg:order-1"
         >
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full badge-neon-blue w-fit">
-            <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
-            <span className="text-xs font-bold text-neon-blue uppercase tracking-wider">Programmer</span>
+          <div className="text-sm text-[var(--accent)] font-medium">
+            Informatics Engineering · Politeknik Negeri Malang
           </div>
 
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight tracking-tight text-center lg:text-left">
-            Hi, I'm <span className="text-white">Afrizal Rafli</span>
+          <h1 className="font-display text-4xl md:text-6xl lg:text-[4.4rem] font-bold leading-[1.08] tracking-tight text-center lg:text-left">
+            Hi, I’m <span className="text-[var(--ink-strong)]">Afrizal Rafli.</span>
           </h1>
 
-          <h2 className="text-xl lg:text-2xl text-slate-300 font-medium opacity-80 mt-2 text-center lg:text-left">
-            Full-Stack Developer <br className="hidden lg:block" /> & Data Science Enthusiast
+          <h2 className="text-xl lg:text-2xl text-[var(--ink)] font-medium text-center lg:text-left">
+            Web Developer and Network Engineer
           </h2>
 
-          <p className="text-slate-400 max-w-lg mt-4 text-center lg:text-left">
-            A passionate student at Politeknik Negeri Malang (Polinema), crafting futuristic web experiences and analyzing complex data.
+          <p className="text-[var(--ink-muted)] max-w-lg mt-4 text-center lg:text-left">
+            I build web applications and explore practical ways to make data useful. I’m currently studying at Politeknik Negeri Malang.
           </p>
 
-            <div className="flex flex-col sm:flex-row justify-center lg:justify-start gap-4 mt-6 w-full sm:w-auto">
-              <a href="#projects" className="px-6 py-2.5 rounded-[16px] glass-panel text-neon-blue font-semibold hover:bg-white/5 transition-all flex items-center justify-center gap-2 hover:-translate-y-1">
-                View My Work <ChevronRight size={18} />
-              </a>
-              <a href="#contact" className="px-6 py-2.5 rounded-[16px] font-semibold text-slate-300 hover:text-white bg-transparent transition-colors flex items-center justify-center">
-                Contact Me
-              </a>
-            </div>
+          <div className="flex flex-col sm:flex-row justify-center lg:justify-start gap-3 mt-4 w-full sm:w-auto">
+            <a href="#projects" className="px-5 min-h-12 rounded-lg bg-[var(--btn)] text-[var(--btn-ink)] font-semibold hover:bg-[var(--btn-hover)] transition-colors flex items-center justify-center gap-2">
+              View my work <ChevronRight size={18} />
+            </a>
+            <a href="#contact" className="px-5 min-h-12 rounded-lg font-semibold text-[var(--ink)] hover:text-[var(--ink-strong)] transition-colors flex items-center justify-center">
+              Contact me
+            </a>
+          </div>
         </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1 }}
-          className="relative h-[320px] md:h-[400px] lg:h-[600px] order-first lg:order-none flex justify-center items-center"
-        >
-          {/* Abstract 3D/Tech representation */}
-          <motion.div
-            animate={{
-              y: [-10, 10, -10],
-              rotateZ: [0, 5, 0]
-            }}
-            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute inset-0 flex items-center justify-center"
-          >
-            <div className="relative w-64 h-64 md:w-80 md:h-80">
-              <div className="absolute inset-0 rounded-full border border-blue-500/30 animate-[spin_10s_linear_infinite]" />
-              <div className="absolute inset-4 rounded-full border border-purple-500/30 animate-[spin_15s_linear_infinite_reverse]" />
-              <div className="absolute inset-8 rounded-full border border-blue-400/20 animate-[spin_20s_linear_infinite]" />
-              <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/10 to-purple-500/10 rounded-full backdrop-blur-sm flex items-center justify-center border border-white/5 overflow-hidden">
-                <img src="./424064945.jpg" alt="Afrizal Rafli" className="w-full h-full object-cover" />
-              </div>
-
-              {/* Floating tech icons */}
-              <motion.div animate={{ y: [-15, 15, -15] }} transition={{ duration: 5, repeat: Infinity }} className="absolute -top-4 -right-4 p-4 glass-panel glow-border">
-                <Database className="text-blue-400" size={24} />
-              </motion.div>
-              <motion.div animate={{ y: [15, -15, 15] }} transition={{ duration: 4, repeat: Infinity }} className="absolute bottom-10 -left-8 p-4 glass-panel glow-border-purple">
-                <Code2 className="text-purple-400" size={24} />
-              </motion.div>
-              <motion.div animate={{ x: [-10, 10, -10] }} transition={{ duration: 5.5, repeat: Infinity }} className="absolute top-1/2 -right-12 p-3 glass-panel">
-                <LineChart className="text-green-400" size={20} />
-              </motion.div>
-            </div>
-          </motion.div>
-        </motion.div>
+        <div className="relative flex flex-col items-center order-1 lg:order-2">
+          <Lamp on={lightsOn} onToggle={onToggle} />
+          <Portrait lightsOn={lightsOn} />
+          <p className="mt-4 text-xs text-[var(--ink-faint)] text-center">
+            Tarik tali lampu untuk ganti suasana
+          </p>
+        </div>
       </div>
     </section>
   );
@@ -171,56 +265,46 @@ const Hero = () => {
 
 const strengths = [
   {
-    title: "Full-Stack Web Dev",
-    icon: <Monitor className="text-blue-400 mb-4" size={32} />,
+    title: "Web Developer",
     desc: "Specializing in PHP, Laravel, and Filament for robust enterprise applications.",
-    skills: ["PHP", "Laravel", "Filament", "React", "Tailwind", "Flutter"],
-    color: "blue"
+    skills: ["PHP", "Laravel", "Filament", "React", "Tailwind", "Flutter"]
   },
   {
     title: "Database Architecture",
-    icon: <Database className="text-purple-400 mb-4" size={32} />,
     desc: "Mastery in SQL and PostgreSQL including Transactions, Stored Procedures, and Materialized Views.",
-    skills: ["PostgreSQL", "SQL"],
-    color: "purple"
+    skills: ["PostgreSQL", "SQL"]
   },
   {
     title: "Data Science & Analytics",
-    icon: <BrainCircuit className="text-green-400 mb-4" size={32} />,
     desc: "Proficient in Python, Pandas, and statistical modeling with Random Forest Regression.",
-    skills: ["Python", "Pandas"],
-    color: "green"
+    skills: ["Python", "Pandas"]
   },
   {
     title: "Infrastructure & Networking",
-    icon: <Network className="text-orange-400 mb-4" size={32} />,
     desc: "Experience in Linux system administration and complex networking simulations using GNS3.",
-    skills: ["Linux", "GNS3", "Docker", "Cisco"],
-    color: "orange"
+    skills: ["Linux", "GNS3", "Docker", "Cisco"]
   },
   {
     title: "Graphic Design",
-    icon: <Palette className="text-pink-400 mb-4" size={32} />,
     desc: "Crafting visually compelling designs and user interfaces with modern creative tools.",
-    skills: ["Canva", "Figma", "Affinity"],
-    color: "pink"
+    skills: ["Canva", "Figma", "Affinity"]
   }
 ];
 
 const About = () => {
   return (
-    <section id="about" className="py-24 px-6 w-full max-w-7xl mx-auto">
+    <section id="about" className="py-20 md:py-28 px-5 md:px-8 w-full max-w-6xl mx-auto">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="text-center mb-16"
+        className="mb-10 md:mb-12 max-w-2xl"
       >
-        <h2 className="text-3xl md:text-5xl font-bold mb-4">Core <span className="text-neon-blue">Strengths</span></h2>
-        <p className="text-slate-400 max-w-2xl mx-auto">A unique blend of software engineering, database mastery, and data science capabilities.</p>
+        <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">What I work with</h2>
+        <p className="text-[var(--ink-muted)]">A mix of software development, databases, data analysis, and design.</p>
       </motion.div>
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {strengths.map((item, index) => (
           <motion.div
             key={index}
@@ -228,34 +312,15 @@ const About = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: index * 0.1 }}
-            whileHover={{ y: -10, scale: 1.02 }}
-            className={`glass-panel p-8 relative group overflow-hidden transition-all duration-300
-              ${item.color === 'blue' ? 'hover:glow-border' :
-                item.color === 'purple' ? 'hover:glow-border-purple' :
-                  item.color === 'green' ? 'hover:border-green-500/30' :
-                    item.color === 'pink' ? 'hover:border-pink-500/30' :
-                      'hover:border-orange-500/30'}`}
+            className="glass-panel p-6 md:p-7 relative group overflow-hidden"
           >
-            <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl rounded-bl-full opacity-0 group-hover:opacity-20 transition-opacity
-              ${item.color === 'blue' ? 'from-blue-500' :
-                item.color === 'purple' ? 'from-purple-500' :
-                  item.color === 'green' ? 'from-green-500' :
-                    item.color === 'pink' ? 'from-pink-500' :
-                      'from-orange-500'}`}
-            />
-            {item.icon}
-            <h3 className="text-xl font-bold mb-3">{item.title}</h3>
-            <p className="text-slate-400 text-sm mb-6 leading-relaxed">{item.desc}</p>
+            <h3 className="text-xl font-bold mb-3 text-[var(--ink-strong)]">{item.title}</h3>
+            <p className="text-[var(--ink-muted)] text-sm mb-6 leading-relaxed">{item.desc}</p>
             <div className="flex flex-wrap gap-2 mt-auto">
               {item.skills.map((skill, i) => (
                 <span
                   key={i}
-                  className={`text-[10px] font-bold px-2.5 py-1 rounded-md uppercase tracking-wider border transition-all duration-300
-                    ${item.color === 'blue' ? 'bg-blue-500/10 text-blue-300 border-blue-500/20 group-hover:bg-blue-500/20 group-hover:border-blue-400/30' :
-                      item.color === 'purple' ? 'bg-purple-500/10 text-purple-300 border-purple-500/20 group-hover:bg-purple-500/20 group-hover:border-purple-400/30' :
-                        item.color === 'green' ? 'bg-green-500/10 text-green-300 border-green-500/20 group-hover:bg-green-500/20 group-hover:border-green-400/30' :
-                          item.color === 'pink' ? 'bg-pink-500/10 text-pink-300 border-pink-500/20 group-hover:bg-pink-500/20 group-hover:border-pink-400/30' :
-                            'bg-orange-500/10 text-orange-300 border-orange-500/20 group-hover:bg-orange-500/20 group-hover:border-orange-400/30'}`}
+                  className="text-[10px] font-bold px-2.5 py-1 rounded-md uppercase tracking-wider border bg-[var(--chip)] text-[var(--ink)] border-[var(--chip-line)]"
                 >
                   {skill}
                 </span>
@@ -270,80 +335,83 @@ const About = () => {
 
 const projects = [
   {
+    title: "Pasar Nusa",
+    type: "B2B Food Supply Chain Platform · Peserta Web Development UPN VETERNITY",
+    role: "Tim · Frontend dan backend",
+    desc: "Produsen daerah, distributor, dan warung biasanya mencatat stok di tempat berbeda, jadi harga dan ketersediaan barang sulit dilacak. Pasar Nusa menyatukan alur itu: pencatatan hasil panen dan indeks harga di sisi produsen, inventori dan rekomendasi restock di sisi distributor, lalu katalog serta transaksi B2B di sisi warung.",
+    techStack: ["Next.js", "Supabase"],
+    link: "https://pasar-nusa.vercel.app/"
+  },
+  {
     title: "Agro-Vision AI",
     type: "Sustainable Farming Management System",
-    desc: "Platform solusi pintar untuk membantu petani mencapai panen optimal melalui diagnosis penyakit tanaman berbasis AI, panduan kalender tanam, dan saran tindakan preventif organik.",
-    techStack: ["React", "Tailwind CSS", "Gemini AI", "Weather API", "Vite"],
-    glow: "blue",
+    role: "Solo · Frontend dan integrasi Gemini",
+    desc: "Petani butuh jawaban cepat saat tanaman terserang penyakit, bukan panduan umum. Aplikasi ini mendiagnosis penyakit dari foto lewat Gemini, punya ensiklopedia hama, peringatan cuaca, kalkulator pupuk dan bibit berdasarkan luas lahan, serta laporan aktivitas yang bisa diunduh sebagai PDF.",
+    techStack: ["React", "Tailwind CSS", "Gemini AI", "Weather API", "Vite", "jsPDF"],
     link: "https://rizalrfli.github.io/agrovision-ai/"
   },
   {
     title: "Analisis Kesehatan Mental Remaja",
     type: "AI / Data Science",
-    desc: "Menganalisis faktor-faktor yang mempengaruhi kesehatan mental remaja, khususnya tingkat depresi, berdasarkan data aktivitas digital dan pola hidup menggunakan Random Forest.",
+    role: "Solo · Analisis dan pemodelan",
+    desc: "Random Forest dipakai untuk memeringkat variabel yang paling berkaitan dengan tingkat depresi remaja. Data yang diuji mencakup durasi media sosial, jam tidur, dan performa akademik, lalu hasilnya disajikan sebagai grafik feature importance dan analisis multivariat.",
     techStack: ["Python", "Pandas", "NumPy", "Matplotlib", "Seaborn", "Scikit-Learn"],
-    glow: "purple",
     link: "https://github.com/rizalrfli/Analisis-Mental-Health-Remaja"
-  },
-  {
-    title: "Data-Driven Statistical Analysis",
-    type: "Analytics",
-    desc: "Academic and practical implementations of normal distribution analysis and complex data calculations using Random Forest.",
-    techStack: ["NumPy", "Pandas", "Scikit-Learn", "Matplotlib", "Statistics"],
-    glow: "green",
-    link: "#"
   }
 ];
 
 const Projects = () => {
   return (
-    <section id="projects" className="py-24 px-6 w-full max-w-7xl mx-auto">
+    <section id="projects" className="py-20 md:py-28 px-5 md:px-8 w-full max-w-6xl mx-auto">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="mb-16"
+        className="mb-10 md:mb-12 max-w-2xl"
       >
-        <h2 className="text-3xl md:text-5xl font-bold mb-4">Featured <span className="text-neon-purple">Works</span></h2>
-        <p className="text-slate-400 max-w-2xl">Showcasing complex implementations across web development, AI, and data analytics.</p>
+        <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">Selected projects</h2>
+        <p className="text-[var(--ink-muted)] max-w-2xl">A selection of my work in web development and data analysis.</p>
       </motion.div>
 
-      <div className="grid lg:grid-cols-3 gap-8">
+      <div className="grid lg:grid-cols-2 gap-4">
         {projects.map((proj, i) => (
           <motion.div
             key={i}
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            whileHover={{ y: -10 }}
-            transition={{ duration: 0.3 }}
-            onClick={() => proj.link !== '#' && window.open(proj.link, '_blank')}
-            className={`glass-panel p-1 rounded-[24px] overflow-hidden group glass-panel-hover cursor-pointer
-              ${proj.glow === 'blue' ? 'hover:border-blue-500/40' :
-                proj.glow === 'purple' ? 'hover:border-purple-500/40' :
-                  'hover:border-green-500/40'}`}
+            transition={{ duration: 0.25 }}
+            className="glass-panel overflow-hidden group"
           >
-            <div className="bg-[#050511]/80 backdrop-blur-xl h-full p-8 rounded-[22px] flex flex-col relative">
-              <div className="flex justify-between items-start mb-6">
-                <span className="text-xs font-mono text-slate-500 uppercase tracking-wider">{proj.type}</span>
-                <div className="p-2 bg-white/5 rounded-full hover:bg-white/10 transition-colors">
-                  <ExternalLink size={16} className="text-slate-300" />
-                </div>
+            <div className="h-full p-6 md:p-8 flex flex-col relative">
+              <div className="flex justify-between items-start mb-5 gap-4">
+                <span className="text-xs text-[var(--accent)] flex-1 pr-2">{proj.type}</span>
+                {proj.link && (
+                  <a
+                    href={proj.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`Buka proyek ${proj.title}`}
+                    className="p-2 -m-2 text-[var(--ink-faint)] hover:text-[var(--accent)] transition-colors"
+                  >
+                    <ExternalLink size={17} />
+                  </a>
+                )}
               </div>
 
-              <h3 className="text-2xl font-bold mb-4 group-hover:text-blue-300 transition-colors">{proj.title}</h3>
-              <p className="text-slate-400 text-sm leading-relaxed mb-6">{proj.desc}</p>
+              <h3 className="font-display text-xl md:text-2xl font-bold mb-2 text-[var(--ink-strong)] group-hover:text-[var(--accent-hover)] transition-colors">
+                {proj.title}
+              </h3>
+              <p className="text-xs text-[var(--ink-faint)] mb-3">{proj.role}</p>
+              <p className="text-[var(--ink-muted)] text-sm leading-relaxed mb-6">{proj.desc}</p>
 
               <div className="mb-6">
-                <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mb-3">Technologies Used</h4>
+                <h4 className="text-xs font-semibold text-[var(--ink-faint)] mb-3">Technologies</h4>
                 <div className="flex flex-wrap gap-2">
                   {proj.techStack.map((tag, j) => (
                     <span
                       key={j}
-                      className={`text-[9px] font-bold px-2 py-1 rounded-md uppercase tracking-wider border transition-all duration-300
-                        ${proj.glow === 'blue' ? 'bg-blue-500/10 text-blue-300 border-blue-500/20 group-hover:bg-blue-500/20 group-hover:border-blue-400/30' :
-                          proj.glow === 'purple' ? 'bg-purple-500/10 text-purple-300 border-purple-500/20 group-hover:bg-purple-500/20 group-hover:border-purple-400/30' :
-                            'bg-green-500/10 text-green-300 border-green-500/20 group-hover:bg-green-500/20 group-hover:border-green-400/30'}`}
+                      className="text-xs text-[var(--ink)] px-2.5 py-1 rounded-md bg-[var(--chip)] border border-[var(--chip-line)]"
                     >
                       {tag}
                     </span>
@@ -358,33 +426,30 @@ const Projects = () => {
   );
 };
 
-const GithubActivity = () => {
+const GithubActivity = ({ lightsOn }: { lightsOn: boolean }) => {
   return (
-    <section id="activity" className="py-24 px-6 w-full max-w-5xl mx-auto overflow-hidden">
+    <section id="activity" className="py-20 md:py-24 px-5 md:px-8 w-full max-w-6xl mx-auto">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="text-center mb-16"
+        className="mb-10 max-w-2xl"
       >
-        <div className="inline-block px-4 py-1.5 mb-4 rounded-full border border-green-500/30 bg-green-500/10 text-green-400 text-xs font-bold uppercase tracking-widest">
-          Open Source
-        </div>
-        <h2 className="text-3xl md:text-5xl font-bold mb-4">GitHub <span style={{ textShadow: '0 0 10px rgba(34, 197, 94, 0.5)', color: '#4ade80' }}>Contributions</span></h2>
-        <p className="text-slate-400 max-w-2xl mx-auto text-lg">A visual representation of my coding activity and open-source contributions over the last year.</p>
+        <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">Recent activity</h2>
+        <p className="text-[var(--ink-muted)] max-w-2xl">My GitHub contribution history.</p>
       </motion.div>
 
       <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        whileInView={{ opacity: 1, scale: 1 }}
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
-        className="glass-panel p-6 md:p-10 rounded-[24px] overflow-hidden hover:border-green-500/30 transition-all duration-300"
+        className="glass-panel p-4 md:p-8 overflow-hidden"
       >
-        <div className="w-full overflow-x-auto pb-4" style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgba(255,255,255,0.1) transparent' }}>
+        <div className="w-full overflow-x-auto pb-4">
           <div className="min-w-[800px] flex justify-center">
-            <GitHubCalendar 
-              username="rizalrfli" 
-              colorScheme="dark"
+            <GitHubCalendar
+              username="rizalrfli"
+              colorScheme={lightsOn ? 'light' : 'dark'}
               blockSize={14}
               blockMargin={5}
               fontSize={14}
@@ -403,11 +468,9 @@ const experiences = [
     items: [
       "Wakil Ketua Umum - Polinema Mengajar",
       "Volunteer Photographer - Tlatah Lereng Gunung Arjuno",
-      "Project Manager - Lab Software Engineering Website (Polinema JTI)",
+      "Project Manager - Website Lab Software Engineering Website (Polinema JTI)",
       "Builder - Toko Bangunan Cahaya Baru Website"
-    ],
-    color: "text-blue-400",
-    glow: "bg-[#3b82f6] shadow-[0_0_8px_#3b82f6]"
+    ]
   },
   {
     year: "2024 - 2025",
@@ -415,9 +478,7 @@ const experiences = [
     items: [
       "Wakil Koordinator Design Graphic - Polinema Mengajar",
       "Photographer - Banyuwangi Ethno Carnival"
-    ],
-    color: "text-purple-400",
-    glow: "bg-[#c084fc] shadow-[0_0_8px_#c084fc]"
+    ]
   },
   {
     year: "2023 - 2024",
@@ -425,31 +486,25 @@ const experiences = [
     items: [
       "Network Administrator & Technician - Asterix Computer",
       "Data Entry Staff - Peruri Bulog Indonesia"
-    ],
-    color: "text-green-400",
-    glow: "bg-[#22c55e] shadow-[0_0_8px_#22c55e]"
+    ]
   }
 ];
 
 const Experience = () => {
   return (
-    <section id="experience" className="py-24 px-6 w-full max-w-5xl mx-auto overflow-hidden">
+    <section id="experience" className="py-20 md:py-28 px-5 md:px-8 w-full max-w-6xl mx-auto overflow-hidden">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="text-center mb-20"
+        className="mb-12 max-w-2xl"
       >
-        <div className="inline-block px-4 py-1.5 mb-4 rounded-full border border-purple-500/30 bg-purple-500/10 text-purple-400 text-xs font-bold uppercase tracking-widest">
-          Career Path
-        </div>
-        <h2 className="text-4xl md:text-6xl font-bold mb-6">Journey & <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">Experience</span></h2>
-        <p className="text-slate-400 max-w-2xl mx-auto text-lg">A chronicle of my evolution as a developer, leader, and creative professional.</p>
+        <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">Experience</h2>
+        <p className="text-[var(--ink-muted)] max-w-2xl">Selected roles and activities alongside my studies.</p>
       </motion.div>
 
       <div className="relative">
-        {/* Central Vertical Line - Gradient */}
-        <div className="absolute left-4 md:left-1/2 md:-ml-[1px] top-0 bottom-0 w-[2px] bg-gradient-to-b from-blue-500 via-purple-500 to-transparent opacity-20" />
+        <div aria-hidden className="absolute left-4 md:left-1/2 md:-ml-[1px] top-0 bottom-0 w-px bg-[var(--line-strong)]" />
 
         <div className="space-y-16 relative">
           {experiences.map((exp, index) => (
@@ -458,54 +513,42 @@ const Experience = () => {
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
+              transition={{ duration: 0.25 }}
               className={`relative flex items-center ${index % 2 === 0 ? 'md:flex-row-reverse' : 'md:flex-row'}`}
             >
-              {/* Timeline Dot with Outer Ring */}
               <div className="absolute left-4 md:left-1/2 md:-translate-x-1/2 flex items-center justify-center z-20">
-                <div className={`w-4 h-4 rounded-full ${exp.glow} z-10 relative`} />
-                <div className={`absolute w-8 h-8 rounded-full ${exp.glow.replace('bg-', 'bg-').split(' ')[0]}/20 animate-ping`} />
-                <div className="absolute w-10 h-10 rounded-full border border-white/5 bg-slate-900/50 backdrop-blur-sm" />
+                <div className="w-4 h-4 rounded-full bg-[var(--accent)] z-10 relative" />
+                <div className="absolute w-7 h-7 rounded-full border border-[var(--line-strong)] bg-[var(--page)]" />
               </div>
 
-              {/* Content Card */}
               <div className={`w-full md:w-[45%] ml-12 md:ml-0 ${index % 2 === 0 ? 'md:pl-12' : 'md:pr-12'}`}>
-                <motion.div
-                  whileHover={{ y: -5, scale: 1.01 }}
-                  className="glass-panel p-8 relative group transition-all duration-300 hover:border-purple-500/30"
-                >
-                  {/* Subtle Background Glow */}
-                  <div className={`absolute -inset-px rounded-[24px] bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity -z-10`} />
-
+                <div className="glass-panel p-6 md:p-7 relative group">
                   <div className="flex flex-col gap-4">
-                    <div className={`flex items-center gap-3 ${exp.color}`}>
+                    <div className="flex items-center gap-3 text-[var(--accent)]">
                       <Calendar size={16} />
-                      <span className="font-mono text-sm font-bold tracking-wider">{exp.year}</span>
+                      <span className="text-sm font-semibold">{exp.year}</span>
                     </div>
 
-                    <div>
-                      <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-blue-300 group-hover:to-purple-300 transition-all duration-300">
-                        {exp.role}
-                      </h3>
-                    </div>
+                    <h3 className="font-display text-xl font-bold text-[var(--ink-strong)] mb-2">
+                      {exp.role}
+                    </h3>
 
                     <ul className="space-y-4 mt-2">
                       {exp.items.map((item, i) => (
                         <li key={i} className="flex items-start gap-3 group/item">
-                          <div className={`mt-1.5 w-1.5 h-1.5 rounded-full shrink-0 ${exp.color.replace('text', 'bg')} opacity-40 group-hover/item:opacity-100 group-hover/item:scale-125 transition-all`} />
-                          <span className="text-slate-400 text-sm leading-relaxed group-hover/item:text-slate-200 transition-colors">
+                          <div className="mt-1.5 w-1.5 h-1.5 rounded-full shrink-0 bg-[var(--accent)] opacity-50 group-hover/item:opacity-100 transition-opacity" />
+                          <span className="text-[var(--ink-muted)] text-sm leading-relaxed group-hover/item:text-[var(--ink)] transition-colors">
                             {item}
                           </span>
                         </li>
                       ))}
                     </ul>
                   </div>
-                </motion.div>
+                </div>
               </div>
 
-              {/* Year Indicator for Desktop (Opposite side of card) */}
               <div className={`hidden md:flex w-[45%] ${index % 2 === 0 ? 'justify-start pr-12' : 'justify-end pl-12'}`}>
-                <div className="text-slate-600 font-bold text-4xl opacity-20 pointer-events-none select-none">
+                <div className="text-[var(--ink-faint)] font-display font-bold text-3xl opacity-50 pointer-events-none select-none">
                   {exp.year.split(' ')[0]}
                 </div>
               </div>
@@ -522,71 +565,61 @@ const achievements = [
     title: "MikroTik Certified Network Associate",
     issuer: "MikroTik",
     date: "April 2024",
-    image: "./Achievment/1743133379367.jpg",
-    glow: "blue"
+    image: "./Achievment/1743133379367.jpg"
   },
   {
     title: "Belajar Dasar AI",
     issuer: "Dicoding Academy",
     date: "September 2025",
-    image: "./Achievment/1759060763412.jpg",
-    glow: "purple"
+    image: "./Achievment/1759060763412.jpg"
   },
   {
     title: "Wakil Koordinator Desain Grafis 2",
     issuer: "Polinema Mengajar",
     date: "Desember 2025",
-    image: "./Achievment/1768038217665.jpg",
-    glow: "green"
+    image: "./Achievment/1768038217665.jpg"
   },
   {
     title: "Juara 3 Poster Competition Open Air",
     issuer: "UKM Radio Kampus Politeknik FM",
     date: "Oktober 2025",
-    image: "./Achievment/1768038591677.jpg",
-    glow: "pink"
+    image: "./Achievment/1768038591677.jpg"
   }
 ];
 
 const Achievements = () => {
   return (
-    <section id="achievements" className="py-24 px-6 w-full max-w-7xl mx-auto">
+    <section id="achievements" className="py-20 md:py-28 px-5 md:px-8 w-full max-w-6xl mx-auto">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="mb-16 text-center md:text-left"
+        className="mb-10 max-w-2xl"
       >
-        <h2 className="text-3xl md:text-5xl font-bold mb-4">Honors & <span className="text-neon-blue">Achievements</span></h2>
-        <p className="text-slate-400 max-w-2xl mx-auto md:mx-0">Recognition of my dedication, skills, and continuous learning journey.</p>
+        <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">Certificates & activities</h2>
+        <p className="text-[var(--ink-muted)]">Selected recognition and extracurricular work.</p>
       </motion.div>
 
-      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {achievements.map((achieve, i) => (
           <motion.div
             key={i}
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: i * 0.1 }}
-            whileHover={{ y: -5 }}
-            className={`glass-panel p-1 rounded-[20px] overflow-hidden group glass-panel-hover
-              ${achieve.glow === 'blue' ? 'hover:border-blue-500/40' :
-                achieve.glow === 'purple' ? 'hover:border-purple-500/40' :
-                  achieve.glow === 'green' ? 'hover:border-green-500/40' :
-                    'hover:border-pink-500/40'}`}
+            transition={{ duration: 0.25 }}
+            className="glass-panel p-3 overflow-hidden group"
           >
-            <div className="bg-[#050511]/80 backdrop-blur-xl h-full p-5 rounded-[18px] flex flex-col relative">
-              <div className="relative w-full h-48 sm:h-40 rounded-xl overflow-hidden mb-5 border border-white/5">
-                <img src={achieve.image} alt={achieve.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-80" />
-                <div className="absolute bottom-3 left-3 flex items-center gap-2">
-                  <Trophy size={14} className={achieve.glow === 'blue' ? 'text-blue-400' : achieve.glow === 'purple' ? 'text-purple-400' : achieve.glow === 'green' ? 'text-green-400' : 'text-pink-400'} />
-                  <span className="text-[10px] font-bold text-white uppercase tracking-wider">{achieve.date}</span>
+            <div className="h-full p-2 flex flex-col relative">
+              <div className="relative w-full h-48 sm:h-40 overflow-hidden mb-4 bg-[var(--thumb)]">
+                <img src={achieve.image} alt={achieve.title} className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-300" />
+                <div className="absolute bottom-2 left-2 flex items-center gap-2 rounded-md bg-[#080c12]/80 px-2 py-1">
+                  <Trophy size={14} className="text-white" />
+                  <span className="text-xs font-semibold text-white">{achieve.date}</span>
                 </div>
               </div>
-              <h3 className="text-lg font-bold mb-2 leading-tight group-hover:text-blue-300 transition-colors">{achieve.title}</h3>
-              <p className="text-slate-400 text-sm mt-auto">{achieve.issuer}</p>
+              <h3 className="font-display text-base font-bold mb-2 leading-tight text-[var(--ink-strong)] group-hover:text-[var(--accent-hover)] transition-colors">{achieve.title}</h3>
+              <p className="text-[var(--ink-muted)] text-sm mt-auto">{achieve.issuer}</p>
             </div>
           </motion.div>
         ))}
@@ -597,132 +630,72 @@ const Achievements = () => {
 
 const Contact = () => {
   return (
-    <section id="contact" className="py-24 px-6 w-full mt-12 bg-gradient-to-t from-blue-900/10 to-transparent border-t border-white/5">
-      <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
-
+    <section id="contact" className="py-20 md:py-28 px-5 md:px-8 w-full mt-8 border-t border-[var(--line)]">
+      <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">Let's <span className="text-neon-blue">Connect</span></h2>
-          <p className="text-slate-400 mb-8 max-w-md text-lg">
-            Whether you have a question, a project idea, or just want to explore tech, my inbox is always open.
+          <h2 className="font-display text-3xl md:text-4xl font-bold mb-5">Let’s talk</h2>
+          <p className="text-[var(--ink-muted)] mb-8 max-w-md text-lg">
+            Have a question or want to discuss a project? Send me an email.
           </p>
 
           <div className="flex flex-col gap-4">
-            <a href="mailto:afrizalrafli27@gmail.com" className="flex items-center gap-4 text-slate-300 hover:text-white transition-colors group">
-              <div className="p-3 bg-white/5 rounded-full group-hover:bg-blue-500/20 group-hover:text-blue-400 transition-colors">
+            <a href="mailto:afrizalrafli27@gmail.com" className="flex items-center gap-4 text-[var(--ink)] hover:text-[var(--ink-strong)] transition-colors group">
+              <div className="w-11 h-11 flex items-center justify-center bg-[var(--chip)] border border-[var(--chip-line)] rounded-lg group-hover:text-[var(--accent)] transition-colors">
                 <Mail size={20} />
               </div>
               afrizalrafli27@gmail.com
             </a>
-            <div className="flex items-center gap-4 text-slate-300">
-              <div className="p-3 bg-white/5 rounded-full">
-                <Server size={20} />
-              </div>
-              Available for Full-Time & Freelance
-            </div>
           </div>
 
-          {/* Dock style socials */}
-          <div className="mt-12 h-16 inline-flex items-center px-8 dock-pill rounded-full justify-center">
-            <div className="flex gap-6 items-center">
-              <a href="https://github.com/rizalrfli" target="_blank" rel="noopener noreferrer" className="p-2 text-white/60 hover:text-white hover:scale-110 transition-all">
-                <Github size={20} />
-              </a>
-              <a href="https://www.linkedin.com/in/afrizalrafli" target="_blank" rel="noopener noreferrer" className="p-2 text-white/60 hover:text-white hover:scale-110 transition-all">
-                <Linkedin size={20} />
-              </a>
-              <a href="https://www.instagram.com/afrzalrfli/" target="_blank" rel="noopener noreferrer" className="p-2 text-white/60 hover:text-white hover:scale-110 transition-all">
-                <Instagram size={20} />
-              </a>
-              <a href="https://wa.me/083834079959" target="_blank" rel="noopener noreferrer" className="p-2 text-white/60 hover:text-white hover:scale-110 transition-all">
-                <MessageSquare size={20} />
-              </a>
-              <div className="w-[1px] h-5 bg-white/20 ml-2" />
-              <div className="flex items-center gap-2">
-                <span className="text-[10px] font-mono text-neon-blue opacity-80">afrizal@portfolio</span>
-              </div>
-            </div>
+          <div className="mt-8 flex items-center gap-2">
+            <a aria-label="GitHub" href="https://github.com/rizalrfli" target="_blank" rel="noopener noreferrer" className="p-3 min-w-11 min-h-11 flex items-center justify-center text-[var(--ink-muted)] hover:text-[var(--ink-strong)] transition-colors">
+              <Github size={20} />
+            </a>
+            <a aria-label="LinkedIn" href="https://www.linkedin.com/in/afrizalrafli" target="_blank" rel="noopener noreferrer" className="p-3 min-w-11 min-h-11 flex items-center justify-center text-[var(--ink-muted)] hover:text-[var(--ink-strong)] transition-colors">
+              <Linkedin size={20} />
+            </a>
+            <a aria-label="Instagram" href="https://www.instagram.com/afrzalrfli/" target="_blank" rel="noopener noreferrer" className="p-3 min-w-11 min-h-11 flex items-center justify-center text-[var(--ink-muted)] hover:text-[var(--ink-strong)] transition-colors">
+              <Instagram size={20} />
+            </a>
+            <a aria-label="WhatsApp" href="https://wa.me/083834079959" target="_blank" rel="noopener noreferrer" className="p-3 min-w-11 min-h-11 flex items-center justify-center text-[var(--ink-muted)] hover:text-[var(--ink-strong)] transition-colors">
+              <MessageSquare size={20} />
+            </a>
           </div>
         </motion.div>
-
-        {/* Terminal Contact Form */}
-        <motion.div
-          initial={{ opacity: 0, x: 20 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          className="glass-panel overflow-hidden glow-border bg-[#020205]/80"
-        >
-          {/* Terminal Header */}
-          <div className="bg-white/5 px-4 py-3 flex items-center gap-2 border-b border-white/10">
-            <div className="w-3 h-3 rounded-full bg-red-500/80" />
-            <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
-            <div className="w-3 h-3 rounded-full bg-green-500/80" />
-            <span className="ml-2 text-xs font-mono text-slate-400 flex items-center gap-2">
-              <Terminal size={12} /> guest@afrizal-portfolio:~
-            </span>
-          </div>
-
-          <div className="p-6 font-mono">
-            <div className="text-blue-400 mb-4 text-sm">$ ./send_message.sh</div>
-
-            <form className="flex flex-col gap-4" onSubmit={(e) => e.preventDefault()}>
-              <div className="flex flex-col gap-1">
-                <label className="text-xs text-slate-400 uppercase tracking-widest">Name</label>
-                <input
-                  type="text"
-                  className="bg-transparent border-b border-slate-700 focus:border-blue-500 outline-none py-2 text-white placeholder:text-slate-600 transition-colors text-sm"
-                  placeholder="John Doe"
-                />
-              </div>
-              <div className="flex flex-col gap-1">
-                <label className="text-xs text-slate-400 uppercase tracking-widest">Email</label>
-                <input
-                  type="email"
-                  className="bg-transparent border-b border-slate-700 focus:border-purple-500 outline-none py-2 text-white placeholder:text-slate-600 transition-colors text-sm"
-                  placeholder="john@example.com"
-                />
-              </div>
-              <div className="flex flex-col gap-1 mt-2">
-                <label className="text-xs text-slate-400 uppercase tracking-widest">Message</label>
-                <textarea
-                  rows={4}
-                  className="bg-transparent border border-slate-700 rounded-lg p-3 text-white focus:border-blue-500 outline-none resize-none placeholder:text-slate-600 focus:bg-white/5 transition-all text-sm mt-1"
-                  placeholder="Type your message here..."
-                />
-              </div>
-
-              <button className="mt-4 flex items-center justify-center gap-2 bg-slate-100 text-slate-900 py-3 rounded-lg font-bold hover:bg-white transition-colors">
-                Execute <Send size={16} />
-              </button>
-            </form>
-          </div>
-        </motion.div>
-
       </div>
 
-      <div className="max-w-7xl mx-auto mt-24 pt-8 border-t border-white/5 text-center flex flex-col md:flex-row items-center justify-between gap-4 text-slate-500 text-sm">
-        <p>&copy; 2026 Afrizal Rafli. All rights reserved.</p>
-        <p className="flex items-center gap-2">
-          Designed with <span className="text-blue-400 animate-pulse">⚡</span>
-        </p>
+      <div className="max-w-6xl mx-auto mt-16 pt-6 border-t border-[var(--line)] text-[var(--ink-faint)] text-sm">
+        <p>&copy; 2026 Afrizal Rafli</p>
       </div>
     </section>
   );
 };
 
 export default function App() {
+  const [lightsOn, setLightsOn] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return window.localStorage.getItem('room-lights') === 'on';
+  });
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = lightsOn ? 'light' : 'dark';
+    window.localStorage.setItem('room-lights', lightsOn ? 'on' : 'off');
+  }, [lightsOn]);
+
+  const toggleLights = () => setLightsOn((current) => !current);
+
   return (
-    <div className="min-h-screen relative font-sans selection:bg-blue-500/30 selection:text-blue-200">
-      <BackgroundElements />
-      <Navbar />
+    <div className="min-h-screen relative font-sans">
+      <Navbar lightsOn={lightsOn} onToggle={toggleLights} />
       <main className="flex flex-col items-center">
-        <Hero />
+        <Hero lightsOn={lightsOn} onToggle={toggleLights} />
         <About />
         <Projects />
-        <GithubActivity />
+        <GithubActivity lightsOn={lightsOn} />
         <Experience />
         <Achievements />
         <Contact />

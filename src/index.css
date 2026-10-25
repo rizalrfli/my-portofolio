@@ -1,97 +1,126 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Inter", "SF Pro Display", -apple-system, BlinkMacSystemFont, ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-sans: "DM Sans", "Segoe UI", sans-serif;
+  --font-display: "Manrope", "DM Sans", sans-serif;
 }
 
-@layer utilities {
-  .glass, .glass-panel {
-    background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 16px;
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-  }
-  
-  .glass-panel-hover {
-    transition: all 0.3s ease;
-  }
-  
-  .glass-panel-hover:hover {
-    background: rgba(255, 255, 255, 0.06);
-    border-color: rgba(59, 130, 246, 0.4);
-    transform: translateX(5px);
-  }
-
-  .text-neon-blue {
-    text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
-    color: #60a5fa;
-  }
-
-  .text-neon-purple {
-    text-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
-    color: #c084fc;
-  }
-
-  .badge-neon-blue {
-    background: rgba(59, 130, 246, 0.1);
-    border: 1px solid rgba(59, 130, 246, 0.2);
-    letter-spacing: 1px;
-  }
-
-  .skill-chip {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-  }
-  
-  .dock-pill {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(12px);
-  }
-
-  .floating {
-    animation: float 4s ease-in-out infinite;
-  }
-  
-  .floating-delayed {
-    animation: float 4s ease-in-out infinite 2s;
-  }
-  
-  .glow-border {
-    border: 1px solid rgba(59, 130, 246, 0.3);
-    box-shadow: 0 0 15px rgba(59, 130, 246, 0.1);
-  }
-  
-  .glow-border-purple {
-    border: 1px solid rgba(168, 85, 247, 0.3);
-    box-shadow: 0 0 15px rgba(168, 85, 247, 0.1);
-  }
+/* Lights off is the default room: deep navy and black. */
+:root {
+  color-scheme: dark;
+  --page: #080c12;
+  --surface: #0e1622;
+  --surface-hover: #111c29;
+  --line: #202d3d;
+  --line-strong: #29415d;
+  --chip: #111e2d;
+  --chip-line: #26384b;
+  --thumb: #101a27;
+  --shade: #2f4a66;
+  --ink-strong: #ffffff;
+  --ink: #d7e0ea;
+  --ink-muted: #a9b7c6;
+  --ink-faint: #8b9aab;
+  --accent: #83b8f5;
+  --accent-hover: #a8cff8;
+  --btn: #17385a;
+  --btn-hover: #204b75;
+  --btn-ink: #ffffff;
+  --lamp: #ffe9c4;
 }
 
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
+/* Lights on: same room, paper walls, navy ink. */
+[data-theme="light"] {
+  color-scheme: light;
+  --page: #eaeef4;
+  --surface: #ffffff;
+  --surface-hover: #f5f8fc;
+  --line: #d2dbe6;
+  --line-strong: #aebdcf;
+  --chip: #f0f4f9;
+  --chip-line: #d2dbe6;
+  --thumb: #e4eaf2;
+  --shade: #7b8ea4;
+  --ink-strong: #0a1420;
+  --ink: #22303f;
+  --ink-muted: #46586b;
+  --ink-faint: #52657a;
+  --accent: #1b4f82;
+  --accent-hover: #123c66;
+  --btn: #123a5c;
+  --btn-hover: #1a4d77;
+  --btn-ink: #ffffff;
+  --lamp: #b9791f;
 }
+
+:root {
+  font-family: "DM Sans", "Segoe UI", sans-serif;
+  background: var(--page);
+  color: var(--ink);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  scroll-behavior: smooth;
+  transition: background-color 450ms ease;
+}
+
+* { box-sizing: border-box; }
 
 body {
-  background-color: #05060f;
-  color: #e2e8f0;
-  overflow-x: hidden;
+  margin: 0;
+  min-width: 320px;
+  background: var(--page);
+  color: var(--ink);
+  transition: background-color 450ms ease, color 450ms ease;
 }
 
-::-webkit-scrollbar {
-  width: 8px;
+::selection { background: #244a73; color: white; }
+
+button, a, input, textarea { -webkit-tap-highlight-color: transparent; }
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
 }
-::-webkit-scrollbar-track {
-  background: #05060f; 
+
+.glass, .glass-panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: none;
+  transition: background-color 450ms ease, border-color 450ms ease;
 }
-::-webkit-scrollbar-thumb {
-  background: rgba(255,255,255,0.1); 
-  border-radius: 4px;
+
+.glass-panel-hover { transition: border-color 180ms ease, background-color 180ms ease; }
+.glass-panel-hover:hover { background: var(--surface-hover); border-color: var(--line-strong); }
+
+.text-neon-blue, .text-neon-purple {
+  color: var(--accent);
+  text-shadow: none;
 }
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(255,255,255,0.2); 
+
+.badge-neon-blue {
+  background: var(--chip);
+  border: 1px solid var(--chip-line);
+  letter-spacing: .02em;
+}
+
+.skill-chip { background: var(--chip); border: 1px solid var(--chip-line); }
+.dock-pill { background: var(--surface); border: 1px solid var(--line); }
+.glow-border, .glow-border-purple { border: 1px solid var(--line-strong); box-shadow: none; }
+
+html { scroll-padding-top: 5.5rem; }
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--page); }
+::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--ink-faint); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
 }
