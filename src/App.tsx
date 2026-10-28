@@ -335,6 +335,14 @@ const About = () => {
 
 const projects = [
   {
+    title: "Lab Software Engineering",
+    type: "Web Profile Laboratorium · Politeknik Negeri Malang",
+    role: "Project Manager · Backend, database, dan admin panel",
+    desc: "Informasi laboratorium sebelumnya tersebar di dokumen dan halaman terpisah, jadi calon anggota dan dosen sulit melihat profil, riset, dan agenda lab dalam satu tempat. labse.web.id menyatukan semuanya: profil, visi-misi, roadmap, personil, serta penelitian dan publikasi, ditambah blog dan formulir pendaftaran anggota yang statusnya dikelola langsung lewat admin panel.",
+    techStack: ["Laravel", "Blade", "PostgreSQL", "Tailwind CSS", "Vite", "Vercel"],
+    link: "https://labse.web.id/"
+  },
+  {
     title: "Pasar Nusa",
     type: "B2B Food Supply Chain Platform · Peserta Web Development UPN VETERNITY",
     role: "Tim · Frontend dan backend",
