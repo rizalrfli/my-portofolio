@@ -3,7 +3,7 @@ import { motion, useReducedMotion } from 'motion/react';
 import {
   ChevronRight,
   Github, Linkedin, Mail, ExternalLink, Calendar, Instagram, MessageSquare, Menu, X, Trophy,
-  Database, Network, Palette, PenTool
+  Database, Network, Palette, PenTool, FileText, Download
 } from 'lucide-react';
 import { GitHubCalendar } from 'react-github-calendar';
 import {
@@ -144,6 +144,16 @@ const Portrait = ({ lightsOn }: { lightsOn: boolean }) => {
   );
 };
 
+const CV_URL = './CV_Afrizal_Rafli.pdf';
+
+const navLinks = [
+  { href: '#about', label: 'About' },
+  { href: '#projects', label: 'Projects' },
+  { href: '#experience', label: 'Experience' },
+  { href: '#achievements', label: 'Achievements' },
+  { href: '#contact', label: 'Contact' }
+];
+
 const Navbar = ({ lightsOn, onToggle }: { lightsOn: boolean; onToggle: () => void }) => {
   const [scrolled, setScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -164,16 +174,23 @@ const Navbar = ({ lightsOn, onToggle }: { lightsOn: boolean; onToggle: () => voi
         }`}
     >
       <div className="max-w-6xl mx-auto px-5 md:px-8 min-h-20 flex items-center justify-between gap-4">
-        <a href="#home" className="font-display font-bold text-lg tracking-tight text-[var(--ink-strong)]" aria-label="Afrizal, kembali ke atas">
+        <a href="#home" className="font-display font-bold text-lg tracking-tight text-[var(--ink-strong)] whitespace-nowrap" aria-label="Afrizal, kembali ke atas">
           Afrizal Rafli
         </a>
 
-        <div className="hidden md:flex items-center gap-8 text-sm font-medium text-[var(--ink)]">
-          <a href="#about" className={linkClass}>About</a>
-          <a href="#projects" className={linkClass}>Projects</a>
-          <a href="#experience" className={linkClass}>Experience</a>
-          <a href="#achievements" className={linkClass}>Achievements</a>
-          <a href="#contact" className={linkClass}>Contact</a>
+        <div className="hidden md:flex items-center gap-4 lg:gap-5 xl:gap-7 text-sm font-medium text-[var(--ink)] whitespace-nowrap">
+          {navLinks.map((link) => (
+            <a key={link.href} href={link.href} className={linkClass}>{link.label}</a>
+          ))}
+          <a
+            href={CV_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="min-h-11 flex items-center gap-2 text-[var(--ink-strong)] hover:text-[var(--accent)] transition-colors"
+          >
+            <FileText size={16} aria-hidden />
+            CV
+          </a>
           <button
             type="button"
             onClick={onToggle}
@@ -210,11 +227,27 @@ const Navbar = ({ lightsOn, onToggle }: { lightsOn: boolean; onToggle: () => voi
           animate={{ opacity: 1 }}
           className="md:hidden bg-[var(--page)] border-b border-[var(--line)] px-6 py-5 flex flex-col gap-2"
         >
-          <a href="#about" onClick={() => setIsOpen(false)} className={`text-lg font-medium text-[var(--ink)] ${linkClass}`}>About</a>
-          <a href="#projects" onClick={() => setIsOpen(false)} className={`text-lg font-medium text-[var(--ink)] ${linkClass}`}>Projects</a>
-          <a href="#experience" onClick={() => setIsOpen(false)} className={`text-lg font-medium text-[var(--ink)] ${linkClass}`}>Experience</a>
-          <a href="#achievements" onClick={() => setIsOpen(false)} className={`text-lg font-medium text-[var(--ink)] ${linkClass}`}>Achievements</a>
-          <a href="#contact" onClick={() => setIsOpen(false)} className={`text-lg font-medium text-[var(--ink)] ${linkClass}`}>Contact</a>        </motion.div>
+          {navLinks.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              onClick={() => setIsOpen(false)}
+              className={`text-lg font-medium text-[var(--ink)] ${linkClass}`}
+            >
+              {link.label}
+            </a>
+          ))}
+          <a
+            href={CV_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setIsOpen(false)}
+            className={`text-lg font-medium text-[var(--ink-strong)] gap-2 ${linkClass}`}
+          >
+            <FileText size={18} aria-hidden />
+            CV
+          </a>
+        </motion.div>
       )}
     </nav>
   );
@@ -249,6 +282,9 @@ const Hero = ({ lightsOn, onToggle }: { lightsOn: boolean; onToggle: () => void 
           <div className="flex flex-col sm:flex-row justify-center lg:justify-start gap-3 mt-4 w-full sm:w-auto">
             <a href="#projects" className="px-5 min-h-12 rounded-lg bg-[var(--btn)] text-[var(--btn-ink)] font-semibold hover:bg-[var(--btn-hover)] transition-colors flex items-center justify-center gap-2">
               View my work <ChevronRight size={18} />
+            </a>
+            <a href={CV_URL} target="_blank" rel="noopener noreferrer" className="px-5 min-h-12 rounded-lg border border-[var(--line-strong)] text-[var(--ink-strong)] font-semibold hover:border-[var(--accent)] hover:text-[var(--accent)] transition-colors flex items-center justify-center gap-2">
+              <FileText size={18} aria-hidden /> Lihat CV
             </a>
             <a href="#contact" className="px-5 min-h-12 rounded-lg font-semibold text-[var(--ink)] hover:text-[var(--ink-strong)] transition-colors flex items-center justify-center">
               Contact me
@@ -687,6 +723,60 @@ const Achievements = () => {
   );
 };
 
+const CvSection = () => {
+  return (
+    <section id="cv" className="py-20 md:py-28 px-5 md:px-8 w-full max-w-6xl mx-auto">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        className="mb-10 md:mb-12 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6"
+      >
+        <div className="max-w-2xl">
+          <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">Curriculum Vitae</h2>
+          <p className="text-[var(--ink-muted)]">
+            Riwayat pendidikan, pengalaman, dan keahlian dalam satu dokumen. Bisa dibaca langsung di sini atau diunduh sebagai PDF.
+          </p>
+        </div>
+
+        <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+          <a
+            href={CV_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-5 min-h-12 rounded-lg border border-[var(--line-strong)] text-[var(--ink-strong)] font-semibold hover:border-[var(--accent)] hover:text-[var(--accent)] transition-colors flex items-center justify-center gap-2"
+          >
+            <ExternalLink size={18} aria-hidden /> Buka di tab baru
+          </a>
+          <a
+            href={CV_URL}
+            download="CV_Afrizal_Rafli.pdf"
+            className="px-5 min-h-12 rounded-lg bg-[var(--btn)] text-[var(--btn-ink)] font-semibold hover:bg-[var(--btn-hover)] transition-colors flex items-center justify-center gap-2"
+          >
+            <Download size={18} aria-hidden /> Unduh PDF
+          </a>
+        </div>
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        className="glass-panel p-2 md:p-3"
+      >
+        <iframe
+          src={`${CV_URL}#view=FitH`}
+          title="Curriculum Vitae Afrizal Rafli"
+          className="w-full h-[70svh] min-h-[420px] rounded-lg border border-[var(--line)] bg-[var(--thumb)]"
+        />
+        <p className="px-2 pt-3 pb-1 text-xs text-[var(--ink-faint)]">
+          Pratinjau PDF butuh penampil bawaan browser. Kalau tidak muncul, pakai tombol Buka di tab baru atau Unduh PDF.
+        </p>
+      </motion.div>
+    </section>
+  );
+};
+
 const Contact = () => {
   return (
     <section id="contact" className="py-20 md:py-28 px-5 md:px-8 w-full mt-8 border-t border-[var(--line)]">
@@ -757,6 +847,7 @@ export default function App() {
         <GithubActivity lightsOn={lightsOn} />
         <Experience />
         <Achievements />
+        <CvSection />
         <Contact />
       </main>
     </div>
