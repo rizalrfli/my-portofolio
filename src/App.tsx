@@ -2,9 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { motion, useReducedMotion } from 'motion/react';
 import {
   ChevronRight,
-  Github, Linkedin, Mail, ExternalLink, Calendar, Instagram, MessageSquare, Menu, X, Trophy
+  Github, Linkedin, Mail, ExternalLink, Calendar, Instagram, MessageSquare, Menu, X, Trophy,
+  Database, Network, Palette, PenTool
 } from 'lucide-react';
 import { GitHubCalendar } from 'react-github-calendar';
+import {
+  SiPhp, SiLaravel, SiFilament, SiReact, SiTailwindcss, SiFlutter,
+  SiPostgresql, SiPython, SiPandas, SiLinux, SiDocker, SiCisco, SiFigma
+} from 'react-icons/si';
 
 const Lamp = ({ on, onToggle }: { on: boolean; onToggle: () => void }) => {
   const [pulling, setPulling] = useState(false);
@@ -263,31 +268,67 @@ const Hero = ({ lightsOn, onToggle }: { lightsOn: boolean; onToggle: () => void 
   );
 };
 
+type Skill = {
+  name: string;
+  href: string;
+  icon: React.ComponentType<{ size?: number; className?: string }>;
+  color: string;
+};
+
+const skill = (
+  name: string,
+  href: string,
+  icon: Skill['icon'],
+  color: string
+): Skill => ({ name, href, icon, color });
+
 const strengths = [
   {
     title: "Web Developer",
     desc: "Specializing in PHP, Laravel, and Filament for robust enterprise applications.",
-    skills: ["PHP", "Laravel", "Filament", "React", "Tailwind", "Flutter"]
+    skills: [
+      skill("PHP", "https://www.php.net/", SiPhp, "#777BB4"),
+      skill("Laravel", "https://laravel.com/", SiLaravel, "#FF2D20"),
+      skill("Filament", "https://filamentphp.com/", SiFilament, "#FDAE4B"),
+      skill("React", "https://react.dev/", SiReact, "#61DAFB"),
+      skill("Tailwind", "https://tailwindcss.com/", SiTailwindcss, "#38BDF8"),
+      skill("Flutter", "https://flutter.dev/", SiFlutter, "#02569B")
+    ]
   },
   {
     title: "Database Architecture",
     desc: "Mastery in SQL and PostgreSQL including Transactions, Stored Procedures, and Materialized Views.",
-    skills: ["PostgreSQL", "SQL"]
+    skills: [
+      skill("PostgreSQL", "https://www.postgresql.org/", SiPostgresql, "#4169E1"),
+      skill("SQL", "https://www.w3schools.com/sql/", Database, "#4B8BBE")
+    ]
   },
   {
     title: "Data Science & Analytics",
     desc: "Proficient in Python, Pandas, and statistical modeling with Random Forest Regression.",
-    skills: ["Python", "Pandas"]
+    skills: [
+      skill("Python", "https://www.python.org/", SiPython, "#3776AB"),
+      skill("Pandas", "https://pandas.pydata.org/", SiPandas, "#E70488")
+    ]
   },
   {
     title: "Infrastructure & Networking",
     desc: "Experience in Linux system administration and complex networking simulations using GNS3.",
-    skills: ["Linux", "GNS3", "Docker", "Cisco"]
+    skills: [
+      skill("Linux", "https://www.linux.org/", SiLinux, "#FCC624"),
+      skill("GNS3", "https://www.gns3.com/", Network, "#4FA3D1"),
+      skill("Docker", "https://www.docker.com/", SiDocker, "#2496ED"),
+      skill("Cisco", "https://www.cisco.com/", SiCisco, "#1BA0D7")
+    ]
   },
   {
     title: "Graphic Design",
     desc: "Crafting visually compelling designs and user interfaces with modern creative tools.",
-    skills: ["Canva", "Figma", "Affinity"]
+    skills: [
+      skill("Canva", "https://www.canva.com/", Palette, "#00C4CC"),
+      skill("Figma", "https://www.figma.com/", SiFigma, "#F24E1E"),
+      skill("Affinity", "https://affinity.serif.com/", PenTool, "#7E4DD2")
+    ]
   }
 ];
 
@@ -317,13 +358,23 @@ const About = () => {
             <h3 className="text-xl font-bold mb-3 text-[var(--ink-strong)]">{item.title}</h3>
             <p className="text-[var(--ink-muted)] text-sm mb-6 leading-relaxed">{item.desc}</p>
             <div className="flex flex-wrap gap-2 mt-auto">
-              {item.skills.map((skill, i) => (
-                <span
-                  key={i}
-                  className="text-[10px] font-bold px-2.5 py-1 rounded-md uppercase tracking-wider border bg-[var(--chip)] text-[var(--ink)] border-[var(--chip-line)]"
+              {item.skills.map((s) => (
+                <a
+                  key={s.name}
+                  href={s.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title={`Buka situs ${s.name}`}
+                  style={{ ['--brand' as string]: s.color }}
+                  className="skill-chip group/skill inline-flex items-center gap-2 min-h-10 pl-2.5 pr-3 rounded-md text-[11px] font-bold uppercase tracking-wider text-[var(--ink)] border border-[var(--chip-line)] hover:border-[var(--brand)] hover:text-[var(--ink-strong)] hover:bg-[var(--surface-hover)] transition-colors"
                 >
-                  {skill}
-                </span>
+                  <s.icon
+                    size={15}
+                    className="shrink-0 opacity-80 group-hover/skill:opacity-100 transition-opacity"
+                    style={{ color: s.color }}
+                  />
+                  {s.name}
+                </a>
               ))}
             </div>
           </motion.div>
