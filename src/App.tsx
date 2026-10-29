@@ -376,7 +376,7 @@ const About = () => (
     <SectionHead
       index="01"
       label="About"
-      title={<>Yang saya<br />kerjakan</>}
+      title={<>Skill<br />yang saya kuasai</>}
       copy="Campuran pengembangan software, basis data, analisis data, dan desain."
     />
 
