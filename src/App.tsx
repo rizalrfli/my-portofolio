@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { motion, useReducedMotion } from 'motion/react';
+import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import {
-  ChevronRight,
-  Github, Linkedin, Mail, ExternalLink, Calendar, Instagram, MessageSquare, Menu, X, Trophy,
-  Database, Network, Palette, PenTool, FileText, Download
+  ArrowUpRight, ArrowRight, Menu, X,
+  Github, Linkedin, Instagram, Mail, Download, FileText, Trophy, MessageSquare,
+  Database, Network, Palette, PenTool
 } from 'lucide-react';
 import { GitHubCalendar } from 'react-github-calendar';
 import {
@@ -11,277 +11,267 @@ import {
   SiPostgresql, SiPython, SiPandas, SiLinux, SiDocker, SiCisco, SiFigma
 } from 'react-icons/si';
 
-const Lamp = ({ on, onToggle }: { on: boolean; onToggle: () => void }) => {
-  const [pulling, setPulling] = useState(false);
-  const release = () => setPulling(false);
-
-  return (
-    <div className="relative z-20 flex flex-col items-center">
-      <motion.div
-        aria-hidden
-        initial={false}
-        animate={{ opacity: on ? 1 : 0 }}
-        transition={{ duration: 0.6, ease: 'easeOut' }}
-        className="pointer-events-none absolute left-1/2 top-[4.6rem] h-80 w-80 -translate-x-1/2 -translate-y-1/2 rounded-full"
-        style={{
-          background:
-            'radial-gradient(circle, rgba(255, 226, 178, 0.34) 0%, rgba(255, 226, 178, 0.10) 42%, rgba(255, 226, 178, 0) 70%)',
-          filter: 'blur(16px)'
-        }}
-      />
-
-      <div aria-hidden className="h-9 w-px bg-[var(--line-strong)]" />
-
-      <div className="relative flex flex-col items-center">
-        <div
-          aria-hidden
-          className="h-3 w-10 bg-[var(--shade)]"
-          style={{ clipPath: 'polygon(26% 0, 74% 0, 100% 100%, 0 100%)' }}
-        />
-        <div
-          aria-hidden
-          className="-mt-1 h-5 w-5 rounded-full border transition-all duration-500"
-          style={{
-            borderColor: on ? 'var(--lamp)' : 'var(--line-strong)',
-            background: on ? 'var(--lamp)' : 'var(--chip)',
-            boxShadow: on ? '0 0 26px 8px rgba(255, 226, 178, 0.32)' : 'inset 0 -2px 3px rgba(0, 0, 0, 0.35)'
-          }}
-        />
-
-        <button
-          type="button"
-          onClick={onToggle}
-          onPointerDown={() => setPulling(true)}
-          onPointerUp={release}
-          onPointerLeave={release}
-          onPointerCancel={release}
-          onKeyDown={(event) => {
-            if (event.key === ' ' || event.key === 'Enter') setPulling(true);
-          }}
-          onKeyUp={release}
-          onBlur={release}
-          aria-pressed={on}
-          aria-label={on ? 'Turn the lights off' : 'Turn the lights on'}
-          className="absolute -right-7 top-1 flex h-14 w-11 flex-col items-center justify-start"
-        >
-          <motion.span
-            aria-hidden
-            initial={false}
-            animate={{ height: pulling ? 40 : 28 }}
-            transition={{ type: 'spring', stiffness: 520, damping: 26 }}
-            className="w-px"
-            style={{ background: 'var(--ink-faint)', boxShadow: '0 0 0 0.5px rgba(4, 10, 16, 0.25)' }}
-          />
-          <motion.span
-            aria-hidden
-            initial={false}
-            animate={{ y: pulling ? 10 : 0 }}
-            transition={{ type: 'spring', stiffness: 520, damping: 26 }}
-            className="mt-0.5 h-2.5 w-2.5 rounded-full"
-            style={{ background: 'var(--ink-faint)', boxShadow: '0 0 0 1px rgba(4, 10, 16, 0.25)' }}
-          />
-        </button>
-      </div>
-    </div>
-  );
-};
-
-const Portrait = ({ lightsOn }: { lightsOn: boolean }) => {
-  const reduceMotion = useReducedMotion();
-  const [tilt, setTilt] = useState({ x: 0, y: 0 });
-
-  const handleMove = (event: React.MouseEvent<HTMLDivElement>) => {
-    if (reduceMotion) return;
-    const rect = event.currentTarget.getBoundingClientRect();
-    const px = (event.clientX - rect.left) / rect.width - 0.5;
-    const py = (event.clientY - rect.top) / rect.height - 0.5;
-    setTilt({ x: py * -7, y: px * 9 });
-  };
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 26, scale: 0.96 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ type: 'spring', stiffness: 90, damping: 16 }}
-      className="relative mt-5"
-    >
-      <motion.div
-        animate={{ rotateX: tilt.x, rotateY: tilt.y }}
-        transition={{ type: 'spring', stiffness: 150, damping: 18 }}
-        onMouseMove={handleMove}
-        onMouseLeave={() => setTilt({ x: 0, y: 0 })}
-        style={{ transformPerspective: 900 }}
-        className="relative w-52 h-64 sm:w-60 sm:h-72 md:w-72 md:h-[21rem] overflow-hidden rounded-t-[48%] rounded-b-2xl border border-[var(--line-strong)] bg-[var(--thumb)] shadow-[0_24px_60px_-30px_rgba(0,0,0,0.65)]"
-      >
-        <img
-          src="/FOTO 3X4.png"
-          alt="Afrizal Rafli"
-          className="w-full h-full object-cover object-top transition-[filter] duration-500"
-          style={{ filter: lightsOn ? 'brightness(1.04) saturate(1.02)' : 'brightness(0.92)' }}
-        />
-
-        {!reduceMotion && (
-          <motion.span
-            key={lightsOn ? 'sweep-on' : 'sweep-off'}
-            aria-hidden
-            initial={{ x: '-120%' }}
-            animate={{ x: '140%' }}
-            transition={{ duration: 1.1, ease: 'easeOut' }}
-            className="pointer-events-none absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
-          />
-        )}
-
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0"
-          style={{
-            background:
-              'linear-gradient(to top, rgba(6, 10, 16, 0.35) 0%, rgba(6, 10, 16, 0) 42%)'
-          }}
-        />
-      </motion.div>
-    </motion.div>
-  );
-};
-
 const CV_URL = './CV_Afrizal_Rafli.pdf';
+const PORTRAIT = '/MJ306260.png';
 
 const navLinks = [
+  { href: '#work', label: 'Work' },
   { href: '#about', label: 'About' },
-  { href: '#projects', label: 'Projects' },
   { href: '#experience', label: 'Experience' },
-  { href: '#achievements', label: 'Achievements' },
-  { href: '#contact', label: 'Contact' }
+  { href: '#awards', label: 'Awards' },
+  { href: '#cv', label: 'CV' }
 ];
 
-const Navbar = ({ lightsOn, onToggle }: { lightsOn: boolean; onToggle: () => void }) => {
+const Eyebrow = ({ children, className = '' }: { children: React.ReactNode; className?: string }) => (
+  <p className={`text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.22em] ${className}`}>
+    {children}
+  </p>
+);
+
+const Toggle = ({ night, onToggle }: { night: boolean; onToggle: () => void }) => (
+  <button
+    type="button"
+    onClick={onToggle}
+    aria-label={night ? 'Aktifkan mode terang' : 'Aktifkan mode gelap'}
+    aria-pressed={night}
+    className="chip chip-hover min-h-11 cursor-pointer px-3"
+  >
+    <span aria-hidden className="relative grid h-3 w-3 place-items-center">
+      <span className={`absolute inset-0 rounded-full border border-current ${night ? '' : 'bg-current'}`} />
+      {night && <span className="absolute -right-1 -top-0.5 h-1.5 w-1.5 rounded-full bg-[var(--bg)]" />}
+    </span>
+    {night ? 'Night' : 'Day'}
+  </button>
+);
+
+const Navbar = ({ night, onToggle }: { night: boolean; onToggle: () => void }) => {
   const [scrolled, setScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener('scroll', handleScroll);
+    const handleScroll = () => setScrolled(window.scrollY > 24);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const linkClass = 'min-h-11 flex items-center hover:text-[var(--accent)] transition-colors';
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [isOpen]);
 
   return (
-    <nav
-      className={`fixed top-0 w-full z-50 transition-colors duration-300 border-b ${scrolled || isOpen
-        ? 'bg-[var(--page)] border-[var(--line)]'
-        : 'bg-transparent border-transparent'
-        }`}
-    >
-      <div className="max-w-6xl mx-auto px-5 md:px-8 min-h-20 flex items-center justify-between gap-4">
-        <a href="#home" className="font-display font-bold text-lg tracking-tight text-[var(--ink-strong)] whitespace-nowrap" aria-label="Afrizal, kembali ke atas">
-          Afrizal Rafli
-        </a>
+    <>
+      <header
+        className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${scrolled || isOpen ? 'bg-[var(--bg)] border-b border-[var(--line)]' : 'border-b border-transparent'
+          }`}
+      >
+        <nav className="mx-auto flex h-16 w-full max-w-[1440px] items-center justify-between gap-3 px-4 sm:h-[72px] sm:px-5 md:gap-6 md:px-8">
+          <a href="#home" className="group flex items-center gap-2.5" aria-label="Afrizal Rafli, kembali ke atas">
+            <span className="grid h-11 w-11 place-items-center rounded-[10px] bg-[var(--solid)] text-[var(--solid-ink)]">
+              <span className="display text-[15px] font-extrabold tracking-[-0.06em]">AR</span>
+            </span>
+            <span className="hidden sm:block text-[13px] font-semibold uppercase tracking-[0.16em]">
+              Afrizal Rafli
+            </span>
+          </a>
 
-        <div className="hidden md:flex items-center gap-4 lg:gap-5 xl:gap-7 text-sm font-medium text-[var(--ink)] whitespace-nowrap">
-          {navLinks.map((link) => (
-            <a key={link.href} href={link.href} className={linkClass}>{link.label}</a>
-          ))}
-          <button
-            type="button"
-            onClick={onToggle}
-            aria-label={lightsOn ? 'Aktifkan mode gelap' : 'Aktifkan mode terang'}
-            className="min-w-11 min-h-11 flex items-center justify-center text-[var(--ink-muted)] hover:text-[var(--accent)] transition-colors"
-          >
-            {lightsOn ? 'Gelap' : 'Terang'}
-          </button>
-        </div>
+          <div className="hidden lg:flex items-center gap-7">
+            {navLinks.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                className="text-[11px] font-semibold uppercase tracking-[0.18em] opacity-70 hover:opacity-100 transition-opacity"
+              >
+                {link.label}
+              </a>
+            ))}
+          </div>
 
-        <div className="flex md:hidden items-center gap-1">
-          <button
-            type="button"
-            onClick={onToggle}
-            aria-label={lightsOn ? 'Aktifkan mode gelap' : 'Aktifkan mode terang'}
-            className="min-w-11 min-h-11 flex items-center justify-center text-xs font-semibold text-[var(--ink-muted)]"
-          >
-            {lightsOn ? 'Gelap' : 'Terang'}
-          </button>
-          <button
-            aria-label={isOpen ? 'Tutup menu' : 'Buka menu'}
-            aria-expanded={isOpen}
-            className="text-[var(--ink-strong)] p-2 min-w-11 min-h-11 flex items-center justify-center"
-            onClick={() => setIsOpen(!isOpen)}
-          >
-            {isOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
-        </div>
-      </div>
+          <div className="flex items-center gap-2">
+            <Toggle night={night} onToggle={onToggle} />
+            <a
+              href={CV_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden md:inline-flex chip chip-hover min-h-10 px-4"
+            >
+              <FileText size={12} aria-hidden /> Resume
+            </a>
+            <a href="#contact" className="hidden md:inline-flex chip chip-solid min-h-10 px-4 hover:opacity-90">
+              Hire me <ArrowUpRight size={12} aria-hidden />
+            </a>
+            <button
+              type="button"
+              aria-label={isOpen ? 'Tutup menu' : 'Buka menu'}
+              aria-expanded={isOpen}
+              onClick={() => setIsOpen((v) => !v)}
+              className="inline-flex h-11 min-w-11 items-center justify-center gap-2 rounded-full border border-[var(--line-strong)] px-3 lg:hidden"
+            >
+              {isOpen ? <X size={18} /> : <Menu size={18} />}
+              <span className="text-[10px] font-semibold uppercase tracking-[0.12em]">{isOpen ? 'Tutup' : 'Menu'}</span>
+            </button>
+          </div>
+        </nav>
+      </header>
 
       {isOpen && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="md:hidden bg-[var(--page)] border-b border-[var(--line)] px-6 py-5 flex flex-col gap-2"
-        >
-          {navLinks.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              onClick={() => setIsOpen(false)}
-              className={`text-lg font-medium text-[var(--ink)] ${linkClass}`}
-            >
-              {link.label}
+        <div className="fixed inset-0 z-40 flex flex-col justify-between bg-[var(--bg)] px-5 pb-8 pt-24 lg:hidden">
+          <div className="flex flex-col">
+            {navLinks.map((link, i) => (
+              <a
+                key={link.href}
+                href={link.href}
+                onClick={() => setIsOpen(false)}
+                className="flex items-center justify-between border-b border-[var(--line)] py-4"
+              >
+                <span className="display text-3xl font-extrabold uppercase tracking-[-0.03em]">{link.label}</span>
+                <span className="text-[10px] font-semibold tracking-[0.2em] opacity-50">
+                  0{i + 1}
+                </span>
+              </a>
+            ))}
+          </div>
+          <div className="flex flex-col gap-3">
+            <a href="#contact" onClick={() => setIsOpen(false)} className="chip chip-solid min-h-12 justify-center px-5">
+              Mulai proyek <ArrowUpRight size={14} aria-hidden />
             </a>
-          ))}
-        </motion.div>
+            <a href={CV_URL} target="_blank" rel="noopener noreferrer" className="chip min-h-12 justify-center px-5">
+              <FileText size={14} aria-hidden /> Lihat CV
+            </a>
+          </div>
+        </div>
       )}
-    </nav>
+    </>
   );
 };
 
-const Hero = ({ lightsOn, onToggle }: { lightsOn: boolean; onToggle: () => void }) => {
+const Portrait = () => {
+  const reduceMotion = useReducedMotion();
+
   return (
-    <section id="home" className="lg:min-h-[90svh] flex items-center relative pt-28 md:pt-24 pb-16 px-5 md:px-8">
-      <div className="max-w-6xl mx-auto w-full grid lg:grid-cols-[1.1fr_.9fr] gap-10 lg:gap-20 items-center">
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.45 }}
-          className="flex flex-col gap-5 items-center lg:items-start order-2 lg:order-1"
-        >
-          <div className="text-sm text-[var(--accent)] font-medium">
-            Informatics Engineering · Politeknik Negeri Malang
+    <motion.img
+      src={PORTRAIT}
+      alt="Afrizal Rafli"
+      initial={reduceMotion ? false : { opacity: 0, y: 28 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ type: 'spring', stiffness: 70, damping: 18, delay: 0.1 }}
+      className="pointer-events-none absolute bottom-0 left-1/2 z-10 h-[46svh] w-auto max-w-none -translate-x-1/2 object-contain object-bottom drop-shadow-[0_28px_55px_rgba(24,32,0,0.20)] sm:h-[64svh] md:h-[112%]"
+    />
+  );
+};
+
+const Hero = () => {
+  const avatars = [
+    './Achievment/1743133379367.jpg',
+    './Achievment/1759060763412.jpg',
+    './Achievment/1768038591677.jpg'
+  ];
+
+  return (
+    <section id="home" className="relative flex min-h-[88svh] flex-col overflow-hidden pt-16 sm:min-h-[100svh] sm:pt-[72px]">
+      <div className="mx-auto flex w-full max-w-[1440px] flex-1 flex-col px-4 sm:px-5 md:px-8">
+
+        <div className="mt-6 flex items-start justify-between gap-4 sm:mt-7 sm:gap-8 md:mt-10">
+          <motion.div
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="max-w-[30rem]"
+          >
+            <div className="mb-3.5 flex items-center gap-2">
+              <span className="pulse-dot inline-block h-2 w-2 rounded-full bg-[var(--fg)]" />
+              <Eyebrow>Open for work · 2026</Eyebrow>
+            </div>
+            <h1 className="display max-w-[24rem] text-[clamp(1.25rem,5.6vw,1.55rem)] font-extrabold uppercase leading-[1.2] tracking-[0.005em] sm:leading-[1.28]">
+              Hii,
+              <br />
+              I'm Afrizal Rafli Kusuma Wardana
+            </h1>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.12 }}
+            className="hidden items-start gap-3 sm:flex md:max-w-[15rem]"
+          >
+            <div className="flex -space-x-2">
+              {avatars.map((src) => (
+                <img
+                  key={src}
+                  src={src}
+                  alt=""
+                  aria-hidden
+                  className="h-8 w-8 rounded-full border-2 border-[var(--bg)] object-cover"
+                />
+              ))}
+            </div>
+            <div>
+              <Eyebrow className="leading-[1.35]">4 sertifikasi<br />&amp; penghargaan</Eyebrow>
+              <p className="mt-1.5 text-[11px] leading-snug text-[var(--muted)]">
+                MikroTik, Dicoding, Polinema Mengajar.
+              </p>
+            </div>
+          </motion.div>
+        </div>
+
+        <div className="relative mt-4 flex flex-1 flex-col md:mt-2">
+          <div className="relative min-h-[48svh] flex-1 sm:min-h-[52svh]">
+            <motion.div
+              aria-hidden
+              initial={{ opacity: 0, y: 34 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
+              className="pointer-events-none absolute inset-x-0 bottom-[42%] z-0 select-none text-center sm:bottom-[32%] md:bottom-[23%]"
+            >
+              <span className="wordmark block text-[clamp(2.75rem,15vw,18.4rem)] text-[var(--wordmark)] sm:text-[clamp(3rem,19vw,18.4rem)]">
+                Afrizal
+              </span>
+            </motion.div>
+
+            <Portrait />
+
+            <div className="absolute inset-x-0 bottom-0 z-20 flex items-end justify-between gap-3 pb-3 md:pb-5">
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.4 }}
+                className="ml-auto hidden max-w-[21rem] flex-wrap justify-end gap-1.5 md:flex"
+              >
+                <span className="chip chip-solid">Laravel</span>
+                {['React', 'PostgreSQL', 'PHP', 'Tailwind', 'Figma', 'Docker', 'GNS3', 'Python'].map((tag) => (
+                  <span key={tag} className="chip chip-hover cursor-default">{tag}</span>
+                ))}
+              </motion.div>
+            </div>
           </div>
-
-          <h1 className="font-display text-4xl md:text-6xl lg:text-[4.4rem] font-bold leading-[1.08] tracking-tight text-center lg:text-left">
-            Hi, I’m <span className="text-[var(--ink-strong)]">Afrizal Rafli.</span>
-          </h1>
-
-          <h2 className="text-xl lg:text-2xl text-[var(--ink)] font-medium text-center lg:text-left">
-            Web Developer and Network Engineer
-          </h2>
-
-          <p className="text-[var(--ink-muted)] max-w-lg mt-4 text-center lg:text-left">
-            I build web applications and explore practical ways to make data useful. I’m currently studying at Politeknik Negeri Malang.
-          </p>
-
-          <div className="flex flex-col sm:flex-row justify-center lg:justify-start gap-3 mt-4 w-full sm:w-auto">
-            <a href="#projects" className="px-5 min-h-12 rounded-lg bg-[var(--btn)] text-[var(--btn-ink)] font-semibold hover:bg-[var(--btn-hover)] transition-colors flex items-center justify-center gap-2">
-              View my work <ChevronRight size={18} />
-            </a>
-            <a href={CV_URL} target="_blank" rel="noopener noreferrer" className="px-5 min-h-12 rounded-lg border border-[var(--line-strong)] text-[var(--ink-strong)] font-semibold hover:border-[var(--accent)] hover:text-[var(--accent)] transition-colors flex items-center justify-center gap-2">
-              <FileText size={18} aria-hidden /> Lihat CV
-            </a>
-            <a href="#contact" className="px-5 min-h-12 rounded-lg font-semibold text-[var(--ink)] hover:text-[var(--ink-strong)] transition-colors flex items-center justify-center">
-              Contact me
-            </a>
-          </div>
-        </motion.div>
-
-        <div className="relative flex flex-col items-center order-1 lg:order-2">
-          <Lamp on={lightsOn} onToggle={onToggle} />
-          <Portrait lightsOn={lightsOn} />
-          <p className="mt-4 text-xs text-[var(--ink-faint)] text-center">
-            Tarik tali lampu untuk ganti suasana
-          </p>
         </div>
       </div>
     </section>
+  );
+};
+
+const Marquee = () => {
+  const words = ['Web Developer', 'Network Engineer', 'Data Science', 'Graphic Design', 'Project Manager'];
+  const row = [...words, ...words];
+
+  return (
+    <div className="inverse marquee overflow-hidden border-y border-[var(--line)] py-3">
+      <div className="marquee-track">
+        {[0, 1].map((copy) => (
+          <div key={copy} className="flex shrink-0 items-center" aria-hidden={copy === 1}>
+            {row.map((word, i) => (
+              <span key={`${copy}-${i}`} className="flex items-center whitespace-nowrap">
+                <span className="display px-5 text-[13px] font-extrabold uppercase tracking-[0.16em] sm:text-sm">
+                  {word}
+                </span>
+                <span className="h-1.5 w-1.5 rounded-full bg-current opacity-60" />
+              </span>
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
   );
 };
 
@@ -292,540 +282,571 @@ type Skill = {
   color: string;
 };
 
-const skill = (
-  name: string,
-  href: string,
-  icon: Skill['icon'],
-  color: string
-): Skill => ({ name, href, icon, color });
+const skill = (name: string, href: string, icon: Skill['icon'], color: string): Skill => ({ name, href, icon, color });
 
 const strengths = [
   {
-    title: "Web Developer",
-    desc: "Specializing in PHP, Laravel, and Filament for robust enterprise applications.",
+    title: 'Web Development',
+    desc: 'PHP, Laravel, dan Filament untuk aplikasi bisnis yang rapi dan tahan lama.',
     skills: [
-      skill("PHP", "https://www.php.net/", SiPhp, "#777BB4"),
-      skill("Laravel", "https://laravel.com/", SiLaravel, "#FF2D20"),
-      skill("Filament", "https://filamentphp.com/", SiFilament, "#FDAE4B"),
-      skill("React", "https://react.dev/", SiReact, "#61DAFB"),
-      skill("Tailwind", "https://tailwindcss.com/", SiTailwindcss, "#38BDF8"),
-      skill("Flutter", "https://flutter.dev/", SiFlutter, "#02569B")
+      skill('PHP', 'https://www.php.net/', SiPhp, '#777BB4'),
+      skill('Laravel', 'https://laravel.com/', SiLaravel, '#FF2D20'),
+      skill('Filament', 'https://filamentphp.com/', SiFilament, '#FDAE4B'),
+      skill('React', 'https://react.dev/', SiReact, '#61DAFB'),
+      skill('Tailwind', 'https://tailwindcss.com/', SiTailwindcss, '#38BDF8'),
+      skill('Flutter', 'https://flutter.dev/', SiFlutter, '#02569B')
     ]
   },
   {
-    title: "Database Architecture",
-    desc: "Mastery in SQL and PostgreSQL including Transactions, Stored Procedures, and Materialized Views.",
+    title: 'Database',
+    desc: 'SQL dan PostgreSQL, termasuk transaksi, stored procedure, dan materialized view.',
     skills: [
-      skill("PostgreSQL", "https://www.postgresql.org/", SiPostgresql, "#4169E1"),
-      skill("SQL", "https://www.w3schools.com/sql/", Database, "#4B8BBE")
+      skill('PostgreSQL', 'https://www.postgresql.org/', SiPostgresql, '#4169E1'),
+      skill('SQL', 'https://www.w3schools.com/sql/', Database, '#4B8BBE')
     ]
   },
   {
-    title: "Data Science & Analytics",
-    desc: "Proficient in Python, Pandas, and statistical modeling with Random Forest Regression.",
+    title: 'Data & Analytics',
+    desc: 'Python, Pandas, dan pemodelan statistik dengan Random Forest Regression.',
     skills: [
-      skill("Python", "https://www.python.org/", SiPython, "#3776AB"),
-      skill("Pandas", "https://pandas.pydata.org/", SiPandas, "#E70488")
+      skill('Python', 'https://www.python.org/', SiPython, '#3776AB'),
+      skill('Pandas', 'https://pandas.pydata.org/', SiPandas, '#E70488')
     ]
   },
   {
-    title: "Infrastructure & Networking",
-    desc: "Experience in Linux system administration and complex networking simulations using GNS3.",
+    title: 'Infrastructure',
+    desc: 'Administrasi Linux dan simulasi jaringan kompleks lewat GNS3.',
     skills: [
-      skill("Linux", "https://www.linux.org/", SiLinux, "#FCC624"),
-      skill("GNS3", "https://www.gns3.com/", Network, "#4FA3D1"),
-      skill("Docker", "https://www.docker.com/", SiDocker, "#2496ED"),
-      skill("Cisco", "https://www.cisco.com/", SiCisco, "#1BA0D7")
+      skill('Linux', 'https://www.linux.org/', SiLinux, '#FCC624'),
+      skill('GNS3', 'https://www.gns3.com/', Network, '#4FA3D1'),
+      skill('Docker', 'https://www.docker.com/', SiDocker, '#2496ED'),
+      skill('Cisco', 'https://www.cisco.com/', SiCisco, '#1BA0D7')
     ]
   },
   {
-    title: "Graphic Design",
-    desc: "Crafting visually compelling designs and user interfaces with modern creative tools.",
+    title: 'Design',
+    desc: 'Antarmuka dan materi visual dengan tools kreatif sehari-hari.',
     skills: [
-      skill("Canva", "https://www.canva.com/", Palette, "#00C4CC"),
-      skill("Figma", "https://www.figma.com/", SiFigma, "#F24E1E"),
-      skill("Affinity", "https://affinity.serif.com/", PenTool, "#7E4DD2")
+      skill('Canva', 'https://www.canva.com/', Palette, '#00C4CC'),
+      skill('Figma', 'https://www.figma.com/', SiFigma, '#F24E1E'),
+      skill('Affinity', 'https://affinity.serif.com/', PenTool, '#7E4DD2')
     ]
   }
 ];
 
-const About = () => {
-  return (
-    <section id="about" className="py-20 md:py-28 px-5 md:px-8 w-full max-w-6xl mx-auto">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        className="mb-10 md:mb-12 max-w-2xl"
-      >
-        <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">What I work with</h2>
-        <p className="text-[var(--ink-muted)]">A mix of software development, databases, data analysis, and design.</p>
-      </motion.div>
-
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {strengths.map((item, index) => (
-          <motion.div
-            key={index}
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: index * 0.1 }}
-            className="glass-panel p-6 md:p-7 relative group overflow-hidden"
-          >
-            <h3 className="text-xl font-bold mb-3 text-[var(--ink-strong)]">{item.title}</h3>
-            <p className="text-[var(--ink-muted)] text-sm mb-6 leading-relaxed">{item.desc}</p>
-            <div className="flex flex-wrap gap-2 mt-auto">
-              {item.skills.map((s) => (
-                <a
-                  key={s.name}
-                  href={s.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  title={`Buka situs ${s.name}`}
-                  style={{ ['--brand' as string]: s.color }}
-                  className="skill-chip group/skill inline-flex items-center gap-2 min-h-10 pl-2.5 pr-3 rounded-md text-[11px] font-bold uppercase tracking-wider text-[var(--ink)] border border-[var(--chip-line)] hover:border-[var(--brand)] hover:text-[var(--ink-strong)] hover:bg-[var(--surface-hover)] transition-colors"
-                >
-                  <s.icon
-                    size={15}
-                    className="shrink-0 opacity-80 group-hover/skill:opacity-100 transition-opacity"
-                    style={{ color: s.color }}
-                  />
-                  {s.name}
-                </a>
-              ))}
-            </div>
-          </motion.div>
-        ))}
+const SectionHead = ({
+  index,
+  label,
+  title,
+  copy
+}: {
+  index: string;
+  label: string;
+  title: string;
+  copy?: string;
+}) => (
+  <motion.div
+    initial={{ opacity: 0, y: 18 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true, margin: '0px 0px -10% 0px' }}
+    transition={{ duration: 0.5 }}
+    className="mb-8 border-t border-[var(--line-strong)] pt-4 sm:mb-10 sm:pt-5 md:mb-14"
+  >
+    <div className="flex flex-col gap-3 sm:gap-5 md:flex-row md:items-end md:justify-between">
+      <div>
+        <Eyebrow className="opacity-60">
+          ({index}) — {label}
+        </Eyebrow>
+        <h2 className="display mt-3 max-w-2xl text-[clamp(2rem,9vw,3.6rem)] font-extrabold uppercase leading-[0.92] tracking-[-0.035em] md:text-[clamp(2rem,5.4vw,3.6rem)]">
+          {title}
+        </h2>
       </div>
-    </section>
-  );
-};
+      {copy && <p className="max-w-xs text-base leading-relaxed text-[var(--muted)] sm:text-sm md:pb-2 md:text-right">{copy}</p>}
+    </div>
+  </motion.div>
+);
+
+const About = () => (
+  <section id="about" className="mx-auto w-full max-w-[1440px] px-4 py-12 sm:px-5 sm:py-16 md:px-8 md:py-24">
+    <SectionHead
+      index="01"
+      label="About"
+      title={<>Yang saya<br />kerjakan</>}
+      copy="Campuran pengembangan software, basis data, analisis data, dan desain."
+    />
+
+    <div className="grid gap-3 min-[520px]:grid-cols-2 lg:grid-cols-3">
+      {strengths.map((item, index) => (
+        <motion.article
+          key={item.title}
+          initial={{ opacity: 0, y: 22 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '0px 0px -8% 0px' }}
+          transition={{ duration: 0.45, delay: index * 0.05 }}
+          className={`card-invert flex flex-col justify-between gap-6 rounded-2xl border border-[var(--line)] p-5 sm:gap-8 sm:p-6 ${index === 0 ? 'min-[520px]:col-span-2 lg:col-span-1 lg:row-span-2' : ''
+            }`}
+        >
+          <div>
+            <div className="mb-5 flex items-start justify-between">
+              <span className="text-[10px] font-semibold tracking-[0.2em] opacity-50">
+                0{index + 1}
+              </span>
+              <ArrowUpRight size={18} aria-hidden className="opacity-40" />
+            </div>
+            <h3 className="display text-2xl font-extrabold uppercase leading-[0.95] tracking-[-0.03em]">
+              {item.title}
+            </h3>
+            <p className="card-muted mt-3 text-sm leading-relaxed text-[var(--muted)]">{item.desc}</p>
+          </div>
+
+          <div className="flex flex-wrap gap-1.5">
+            {item.skills.map((s) => (
+              <a
+                key={s.name}
+                href={s.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                title={`Buka situs ${s.name}`}
+                className="chip card-soft min-h-11 px-3"
+              >
+                <s.icon size={12} className="shrink-0" />
+                {s.name}
+              </a>
+            ))}
+          </div>
+        </motion.article>
+      ))}
+    </div>
+  </section>
+);
 
 const projects = [
   {
-    title: "Lab Software Engineering",
-    type: "Web Profile Laboratorium · Politeknik Negeri Malang",
-    role: "Project Manager · Backend, database, dan admin panel",
-    desc: "Informasi laboratorium sebelumnya tersebar di dokumen dan halaman terpisah, jadi calon anggota dan dosen sulit melihat profil, riset, dan agenda lab dalam satu tempat. labse.web.id menyatukan semuanya: profil, visi-misi, roadmap, personil, serta penelitian dan publikasi, ditambah blog dan formulir pendaftaran anggota yang statusnya dikelola langsung lewat admin panel.",
-    techStack: ["Laravel", "Blade", "PostgreSQL", "Tailwind CSS", "Vite", "Vercel"],
-    link: "https://labse.web.id/"
+    title: 'Lab Software Engineering',
+    type: 'Web profile laboratorium · Polinema',
+    role: 'Project Manager · Backend, database, admin panel',
+    desc: 'Informasi laboratorium sebelumnya tersebar di dokumen dan halaman terpisah. labse.web.id menyatukan profil, visi-misi, roadmap, personil, riset, dan publikasi — plus blog dan formulir pendaftaran anggota yang dikelola lewat admin panel.',
+    techStack: ['Laravel', 'Blade', 'PostgreSQL', 'Tailwind CSS', 'Vite', 'Vercel'],
+    link: 'https://labse.web.id/'
   },
   {
-    title: "Pasar Nusa",
-    type: "B2B Food Supply Chain Platform · Peserta Web Development UPN VETERNITY",
-    role: "Tim · Frontend dan backend",
-    desc: "Produsen daerah, distributor, dan warung biasanya mencatat stok di tempat berbeda, jadi harga dan ketersediaan barang sulit dilacak. Pasar Nusa menyatukan alur itu: pencatatan hasil panen dan indeks harga di sisi produsen, inventori dan rekomendasi restock di sisi distributor, lalu katalog serta transaksi B2B di sisi warung.",
-    techStack: ["Next.js", "Supabase"],
-    link: "https://pasar-nusa.vercel.app/"
+    title: 'Pasar Nusa',
+    type: 'B2B food supply chain · UPN VETERNITY',
+    role: 'Tim · Frontend dan backend',
+    desc: 'Produsen, distributor, dan warung mencatat stok di tempat berbeda. Pasar Nusa menyatukan alurnya: pencatatan panen dan indeks harga di sisi produsen, inventori dan rekomendasi restock di distributor, lalu katalog dan transaksi B2B di warung.',
+    techStack: ['Next.js', 'Supabase'],
+    link: 'https://pasar-nusa.vercel.app/'
   },
   {
-    title: "Agro-Vision AI",
-    type: "Sustainable Farming Management System",
-    role: "Solo · Frontend dan integrasi Gemini",
-    desc: "Petani butuh jawaban cepat saat tanaman terserang penyakit, bukan panduan umum. Aplikasi ini mendiagnosis penyakit dari foto lewat Gemini, punya ensiklopedia hama, peringatan cuaca, kalkulator pupuk dan bibit berdasarkan luas lahan, serta laporan aktivitas yang bisa diunduh sebagai PDF.",
-    techStack: ["React", "Tailwind CSS", "Gemini AI", "Weather API", "Vite", "jsPDF"],
-    link: "https://rizalrfli.github.io/agrovision-ai/"
+    title: 'Agro-Vision AI',
+    type: 'Sustainable farming management system',
+    role: 'Solo · Frontend dan integrasi Gemini',
+    desc: 'Petani butuh jawaban cepat saat tanaman terserang penyakit, bukan panduan umum. Aplikasi ini mendiagnosis penyakit dari foto lewat Gemini, punya ensiklopedia hama, peringatan cuaca, kalkulator pupuk, dan laporan PDF.',
+    techStack: ['React', 'Tailwind CSS', 'Gemini AI', 'Weather API', 'Vite', 'jsPDF'],
+    link: 'https://rizalrfli.github.io/agrovision-ai/'
   },
   {
-    title: "Analisis Kesehatan Mental Remaja",
-    type: "AI / Data Science",
-    role: "Solo · Analisis dan pemodelan",
-    desc: "Random Forest dipakai untuk memeringkat variabel yang paling berkaitan dengan tingkat depresi remaja. Data yang diuji mencakup durasi media sosial, jam tidur, dan performa akademik, lalu hasilnya disajikan sebagai grafik feature importance dan analisis multivariat.",
-    techStack: ["Python", "Pandas", "NumPy", "Matplotlib", "Seaborn", "Scikit-Learn"],
-    link: "https://github.com/rizalrfli/Analisis-Mental-Health-Remaja"
+    title: 'Analisis Kesehatan Mental Remaja',
+    type: 'AI / Data science',
+    role: 'Solo · Analisis dan pemodelan',
+    desc: 'Random Forest dipakai untuk memeringkat variabel yang paling berkaitan dengan tingkat depresi remaja — durasi media sosial, jam tidur, dan performa akademik — lalu disajikan sebagai grafik feature importance.',
+    techStack: ['Python', 'Pandas', 'NumPy', 'Matplotlib', 'Seaborn', 'Scikit-Learn'],
+    link: 'https://github.com/rizalrfli/Analisis-Mental-Health-Remaja'
   }
 ];
 
-const Projects = () => {
-  return (
-    <section id="projects" className="py-20 md:py-28 px-5 md:px-8 w-full max-w-6xl mx-auto">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        className="mb-10 md:mb-12 max-w-2xl"
-      >
-        <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">Selected projects</h2>
-        <p className="text-[var(--ink-muted)] max-w-2xl">A selection of my work in web development and data analysis.</p>
-      </motion.div>
+const Projects = () => (
+  <section id="work" className="mx-auto w-full max-w-[1440px] px-4 py-12 sm:px-5 sm:py-16 md:px-8 md:py-24">
+    <SectionHead
+      index="02"
+      label="Work"
+      title={<>Proyek<br />pilihan</>}
+      copy="Empat proyek yang paling menggambarkan cara saya bekerja."
+    />
 
-      <div className="grid lg:grid-cols-2 gap-4">
-        {projects.map((proj, i) => (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.25 }}
-            className="glass-panel overflow-hidden group"
-          >
-            <div className="h-full p-6 md:p-8 flex flex-col relative">
-              <div className="flex justify-between items-start mb-5 gap-4">
-                <span className="text-xs text-[var(--accent)] flex-1 pr-2">{proj.type}</span>
-                {proj.link && (
-                  <a
-                    href={proj.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`Buka proyek ${proj.title}`}
-                    className="p-2 -m-2 text-[var(--ink-faint)] hover:text-[var(--accent)] transition-colors"
-                  >
-                    <ExternalLink size={17} />
-                  </a>
-                )}
-              </div>
+    <div className="border-t border-[var(--line)]">
+      {projects.map((proj, i) => (
+        <motion.a
+          key={proj.title}
+          href={proj.link}
+          target="_blank"
+          rel="noopener noreferrer"
+          initial={{ opacity: 0, y: 18 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '0px 0px -8% 0px' }}
+          transition={{ duration: 0.45, delay: i * 0.04 }}
+          className="group block border-b border-[var(--line)] py-6 transition-colors sm:py-7 md:py-9 hover:bg-[var(--panel)]"
+        >
+          <div className="grid min-w-0 gap-4 px-1 md:grid-cols-[64px_minmax(0,1fr)_minmax(0,1fr)_auto] md:items-start md:gap-8">
+            <span className="display text-xs font-bold tracking-[0.1em] opacity-40 sm:text-sm">
+              0{i + 1}
+            </span>
 
-              <h3 className="font-display text-xl md:text-2xl font-bold mb-2 text-[var(--ink-strong)] group-hover:text-[var(--accent-hover)] transition-colors">
+            <div>
+              <h3 className="display break-words text-[clamp(1.35rem,6vw,2.5rem)] font-extrabold uppercase leading-[0.98] tracking-[-0.035em] md:text-[clamp(1.5rem,3.4vw,2.5rem)]">
                 {proj.title}
               </h3>
-              <p className="text-xs text-[var(--ink-faint)] mb-3">{proj.role}</p>
-              <p className="text-[var(--ink-muted)] text-sm leading-relaxed mb-6">{proj.desc}</p>
+              <Eyebrow className="mt-3 opacity-55">{proj.type}</Eyebrow>
+              <p className="mt-3 text-sm leading-relaxed text-[var(--faint)]">{proj.role}</p>
+            </div>
 
-              <div className="mb-6">
-                <h4 className="text-xs font-semibold text-[var(--ink-faint)] mb-3">Technologies</h4>
-                <div className="flex flex-wrap gap-2">
-                  {proj.techStack.map((tag, j) => (
-                    <span
-                      key={j}
-                      className="text-xs text-[var(--ink)] px-2.5 py-1 rounded-md bg-[var(--chip)] border border-[var(--chip-line)]"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
+            <div>
+              <p className="text-sm leading-relaxed text-[var(--muted)]">{proj.desc}</p>
+              <div className="mt-4 flex flex-wrap gap-2">
+                {proj.techStack.map((tag) => (
+                  <span key={tag} className="chip">{tag}</span>
+                ))}
               </div>
             </div>
-          </motion.div>
-        ))}
-      </div>
-    </section>
-  );
-};
 
-const GithubActivity = ({ lightsOn }: { lightsOn: boolean }) => {
-  return (
-    <section id="activity" className="py-20 md:py-24 px-5 md:px-8 w-full max-w-6xl mx-auto">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        className="mb-10 max-w-2xl"
-      >
-        <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">Recent activity</h2>
-        <p className="text-[var(--ink-muted)] max-w-2xl">My GitHub contribution history.</p>
-      </motion.div>
+            <span className="grid h-11 w-11 shrink-0 place-items-center justify-self-end rounded-full border border-[var(--line-strong)] transition-colors md:justify-self-auto group-hover:bg-[var(--solid)] group-hover:text-[var(--solid-ink)]">
+              <ArrowUpRight size={18} aria-hidden />
+            </span>
+          </div>
+        </motion.a>
+      ))}
+    </div>
+  </section>
+);
+
+const GithubActivity = ({ night }: { night: boolean }) => (
+  <section id="activity" className="inverse border-y border-[var(--line)] py-16 md:py-24">
+    <div className="mx-auto w-full max-w-[1440px] px-5 md:px-8">
+      <div className="mb-10 flex flex-col gap-5 border-t border-[var(--line-strong)] pt-5 md:mb-12 md:flex-row md:items-end md:justify-between">
+        <div>
+          <Eyebrow className="opacity-60">(03) — Activity</Eyebrow>
+          <h2 className="display mt-3 text-[clamp(2rem,5.4vw,3.6rem)] font-extrabold uppercase leading-[0.92] tracking-[-0.035em]">
+            Commit<br />terakhir
+          </h2>
+        </div>
+        <a
+          href="https://github.com/rizalrfli"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="chip chip-hover min-h-11 w-fit px-3"
+        >
+          <Github size={12} aria-hidden /> github.com/rizalrfli <ArrowUpRight size={12} aria-hidden />
+        </a>
+      </div>
 
       <motion.div
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
-        className="glass-panel p-4 md:p-8 overflow-hidden"
+        className="overflow-hidden rounded-2xl border border-[var(--line)] p-4 md:p-6"
       >
-        <div className="w-full overflow-x-auto pb-4">
-          <div className="min-w-[800px] flex justify-center">
+        <div className="hidden w-full overflow-x-auto pb-2 sm:block">
+          <div className="min-w-[760px] flex justify-center">
             <GitHubCalendar
               username="rizalrfli"
-              colorScheme={lightsOn ? 'light' : 'dark'}
-              blockSize={14}
+              colorScheme={night ? 'light' : 'dark'}
+              blockSize={13}
               blockMargin={5}
-              fontSize={14}
+              fontSize={13}
             />
           </div>
         </div>
+        <a
+          href="https://github.com/rizalrfli"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="chip chip-hover flex min-h-12 w-full justify-center px-4 sm:hidden"
+        >
+          <Github size={14} aria-hidden /> Lihat aktivitas GitHub
+          <ArrowUpRight size={14} aria-hidden />
+        </a>
       </motion.div>
-    </section>
-  );
-};
+    </div>
+  </section>
+);
 
 const experiences = [
   {
-    year: "2025 - 2026",
-    role: "Leadership & Project Management",
+    year: '2025 — 2026',
+    role: 'Leadership & Project Management',
     items: [
-      "Wakil Ketua Umum - Polinema Mengajar",
-      "Volunteer Photographer - Tlatah Lereng Gunung Arjuno",
-      "Project Manager - Website Lab Software Engineering Website (Polinema JTI)",
-      "Builder - Toko Bangunan Cahaya Baru Website"
+      'Wakil Ketua Umum — Polinema Mengajar',
+      'Volunteer Photographer — Tlatah Lereng Gunung Arjuno',
+      'Project Manager — Website Lab Software Engineering (Polinema JTI)',
+      'Builder — Toko Bangunan Cahaya Baru Website'
     ]
   },
   {
-    year: "2024 - 2025",
-    role: "Graphic Design & Event Photography",
+    year: '2024 — 2025',
+    role: 'Graphic Design & Event Photography',
     items: [
-      "Wakil Koordinator Design Graphic - Polinema Mengajar",
-      "Photographer - Banyuwangi Ethno Carnival"
+      'Wakil Koordinator Design Graphic — Polinema Mengajar',
+      'Photographer — Banyuwangi Ethno Carnival'
     ]
   },
   {
-    year: "2023 - 2024",
-    role: "Technical & Data Internships",
+    year: '2023 — 2024',
+    role: 'Technical & Data Internships',
     items: [
-      "Network Administrator & Technician - Asterix Computer",
-      "Data Entry Staff - Peruri Bulog Indonesia"
+      'Network Administrator & Technician — Asterix Computer',
+      'Data Entry Staff — Peruri Bulog Indonesia'
     ]
   }
 ];
 
-const Experience = () => {
-  return (
-    <section id="experience" className="py-20 md:py-28 px-5 md:px-8 w-full max-w-6xl mx-auto overflow-hidden">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        className="mb-12 max-w-2xl"
-      >
-        <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">Experience</h2>
-        <p className="text-[var(--ink-muted)] max-w-2xl">Selected roles and activities alongside my studies.</p>
-      </motion.div>
+const Experience = () => (
+  <section id="experience" className="mx-auto w-full max-w-[1440px] px-4 py-12 sm:px-5 sm:py-16 md:px-8 md:py-24">
+    <SectionHead
+      index="04"
+      label="Experience"
+      title={<>Jejak<br />organisasi</>}
+      copy="Peran dan aktivitas di luar kelas, tiga tahun terakhir."
+    />
 
-      <div className="relative">
-        <div aria-hidden className="absolute left-4 md:left-1/2 md:-ml-[1px] top-0 bottom-0 w-px bg-[var(--line-strong)]" />
-
-        <div className="space-y-16 relative">
-          {experiences.map((exp, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.25 }}
-              className={`relative flex items-center ${index % 2 === 0 ? 'md:flex-row-reverse' : 'md:flex-row'}`}
-            >
-              <div className="absolute left-4 md:left-1/2 md:-translate-x-1/2 flex items-center justify-center z-20">
-                <div className="w-4 h-4 rounded-full bg-[var(--accent)] z-10 relative" />
-                <div className="absolute w-7 h-7 rounded-full border border-[var(--line-strong)] bg-[var(--page)]" />
-              </div>
-
-              <div className={`w-full md:w-[45%] ml-12 md:ml-0 ${index % 2 === 0 ? 'md:pl-12' : 'md:pr-12'}`}>
-                <div className="glass-panel p-6 md:p-7 relative group">
-                  <div className="flex flex-col gap-4">
-                    <div className="flex items-center gap-3 text-[var(--accent)]">
-                      <Calendar size={16} />
-                      <span className="text-sm font-semibold">{exp.year}</span>
-                    </div>
-
-                    <h3 className="font-display text-xl font-bold text-[var(--ink-strong)] mb-2">
-                      {exp.role}
-                    </h3>
-
-                    <ul className="space-y-4 mt-2">
-                      {exp.items.map((item, i) => (
-                        <li key={i} className="flex items-start gap-3 group/item">
-                          <div className="mt-1.5 w-1.5 h-1.5 rounded-full shrink-0 bg-[var(--accent)] opacity-50 group-hover/item:opacity-100 transition-opacity" />
-                          <span className="text-[var(--ink-muted)] text-sm leading-relaxed group-hover/item:text-[var(--ink)] transition-colors">
-                            {item}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              </div>
-
-              <div className={`hidden md:flex w-[45%] ${index % 2 === 0 ? 'justify-start pr-12' : 'justify-end pl-12'}`}>
-                <div className="text-[var(--ink-faint)] font-display font-bold text-3xl opacity-50 pointer-events-none select-none">
-                  {exp.year.split(' ')[0]}
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
-
-const achievements = [
-  {
-    title: "MikroTik Certified Network Associate",
-    issuer: "MikroTik",
-    date: "April 2024",
-    image: "./Achievment/1743133379367.jpg"
-  },
-  {
-    title: "Belajar Dasar AI",
-    issuer: "Dicoding Academy",
-    date: "September 2025",
-    image: "./Achievment/1759060763412.jpg"
-  },
-  {
-    title: "Wakil Koordinator Desain Grafis 2",
-    issuer: "Polinema Mengajar",
-    date: "Desember 2025",
-    image: "./Achievment/1768038217665.jpg"
-  },
-  {
-    title: "Juara 3 Poster Competition Open Air",
-    issuer: "UKM Radio Kampus Politeknik FM",
-    date: "Oktober 2025",
-    image: "./Achievment/1768038591677.jpg"
-  }
-];
-
-const Achievements = () => {
-  return (
-    <section id="achievements" className="py-20 md:py-28 px-5 md:px-8 w-full max-w-6xl mx-auto">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        className="mb-10 max-w-2xl"
-      >
-        <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">Certificates & activities</h2>
-        <p className="text-[var(--ink-muted)]">Selected recognition and extracurricular work.</p>
-      </motion.div>
-
-      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {achievements.map((achieve, i) => (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.25 }}
-            className="glass-panel p-3 overflow-hidden group"
-          >
-            <div className="h-full p-2 flex flex-col relative">
-              <div className="relative w-full h-48 sm:h-40 overflow-hidden mb-4 bg-[var(--thumb)]">
-                <img src={achieve.image} alt={achieve.title} className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-300" />
-                <div className="absolute bottom-2 left-2 flex items-center gap-2 rounded-md bg-[#080c12]/80 px-2 py-1">
-                  <Trophy size={14} className="text-white" />
-                  <span className="text-xs font-semibold text-white">{achieve.date}</span>
-                </div>
-              </div>
-              <h3 className="font-display text-base font-bold mb-2 leading-tight text-[var(--ink-strong)] group-hover:text-[var(--accent-hover)] transition-colors">{achieve.title}</h3>
-              <p className="text-[var(--ink-muted)] text-sm mt-auto">{achieve.issuer}</p>
-            </div>
-          </motion.div>
-        ))}
-      </div>
-    </section>
-  );
-};
-
-const CvSection = () => {
-  return (
-    <section id="cv" className="py-20 md:py-28 px-5 md:px-8 w-full max-w-6xl mx-auto">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        className="mb-10 md:mb-12 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6"
-      >
-        <div className="max-w-2xl">
-          <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">Curriculum Vitae</h2>
-          <p className="text-[var(--ink-muted)]">
-            Riwayat pendidikan, pengalaman, dan keahlian dalam satu dokumen. Bisa dibaca langsung di sini atau diunduh sebagai PDF.
-          </p>
-        </div>
-
-        <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-          <a
-            href={CV_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="px-5 min-h-12 rounded-lg border border-[var(--line-strong)] text-[var(--ink-strong)] font-semibold hover:border-[var(--accent)] hover:text-[var(--accent)] transition-colors flex items-center justify-center gap-2"
-          >
-            <ExternalLink size={18} aria-hidden /> Buka di tab baru
-          </a>
-          <a
-            href={CV_URL}
-            download="CV_Afrizal_Rafli.pdf"
-            className="px-5 min-h-12 rounded-lg bg-[var(--btn)] text-[var(--btn-ink)] font-semibold hover:bg-[var(--btn-hover)] transition-colors flex items-center justify-center gap-2"
-          >
-            <Download size={18} aria-hidden /> Unduh PDF
-          </a>
-        </div>
-      </motion.div>
-
-      <motion.div
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        className="glass-panel p-2 md:p-3"
-      >
-        <iframe
-          src={`${CV_URL}#view=FitH`}
-          title="Curriculum Vitae Afrizal Rafli"
-          className="w-full h-[70svh] min-h-[420px] rounded-lg border border-[var(--line)] bg-[var(--thumb)]"
-        />
-        <p className="px-2 pt-3 pb-1 text-xs text-[var(--ink-faint)]">
-          Pratinjau PDF butuh penampil bawaan browser. Kalau tidak muncul, pakai tombol Buka di tab baru atau Unduh PDF.
-        </p>
-      </motion.div>
-    </section>
-  );
-};
-
-const Contact = () => {
-  return (
-    <section id="contact" className="py-20 md:py-28 px-5 md:px-8 w-full mt-8 border-t border-[var(--line)]">
-      <div className="max-w-6xl mx-auto">
+    <div className="border-t border-[var(--line)]">
+      {experiences.map((exp, i) => (
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          key={exp.year}
+          initial={{ opacity: 0, y: 18 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, margin: '0px 0px -8% 0px' }}
+          transition={{ duration: 0.45, delay: i * 0.05 }}
+          className="grid gap-5 border-b border-[var(--line)] py-7 md:grid-cols-[220px_1fr] md:gap-10 md:py-9"
         >
-          <h2 className="font-display text-3xl md:text-4xl font-bold mb-5">Let’s talk</h2>
-          <p className="text-[var(--ink-muted)] mb-8 max-w-md text-lg">
-            Have a question or want to discuss a project? Send me an email.
-          </p>
-
-          <div className="flex flex-col gap-4">
-            <a href="mailto:afrizalrafli27@gmail.com" className="flex items-center gap-4 text-[var(--ink)] hover:text-[var(--ink-strong)] transition-colors group">
-              <div className="w-11 h-11 flex items-center justify-center bg-[var(--chip)] border border-[var(--chip-line)] rounded-lg group-hover:text-[var(--accent)] transition-colors">
-                <Mail size={20} />
-              </div>
-              afrizalrafli27@gmail.com
-            </a>
+          <div className="flex items-start gap-3 md:flex-col md:gap-2">
+            <span className="display text-lg font-extrabold tracking-[-0.02em] md:text-2xl">
+              {exp.year}
+            </span>
+            <span className="mt-2 hidden h-px w-10 bg-[var(--line-strong)] md:block" />
           </div>
 
-          <div className="mt-8 flex items-center gap-2">
-            <a aria-label="GitHub" href="https://github.com/rizalrfli" target="_blank" rel="noopener noreferrer" className="p-3 min-w-11 min-h-11 flex items-center justify-center text-[var(--ink-muted)] hover:text-[var(--ink-strong)] transition-colors">
-              <Github size={20} />
-            </a>
-            <a aria-label="LinkedIn" href="https://www.linkedin.com/in/afrizalrafli" target="_blank" rel="noopener noreferrer" className="p-3 min-w-11 min-h-11 flex items-center justify-center text-[var(--ink-muted)] hover:text-[var(--ink-strong)] transition-colors">
-              <Linkedin size={20} />
-            </a>
-            <a aria-label="Instagram" href="https://www.instagram.com/afrzalrfli/" target="_blank" rel="noopener noreferrer" className="p-3 min-w-11 min-h-11 flex items-center justify-center text-[var(--ink-muted)] hover:text-[var(--ink-strong)] transition-colors">
-              <Instagram size={20} />
-            </a>
-            <a aria-label="WhatsApp" href="https://wa.me/083834079959" target="_blank" rel="noopener noreferrer" className="p-3 min-w-11 min-h-11 flex items-center justify-center text-[var(--ink-muted)] hover:text-[var(--ink-strong)] transition-colors">
-              <MessageSquare size={20} />
-            </a>
+          <div>
+            <h3 className="display text-xl font-extrabold uppercase leading-tight tracking-[-0.02em] md:text-2xl">
+              {exp.role}
+            </h3>
+            <ul className="mt-4 grid gap-2 sm:grid-cols-2">
+              {exp.items.map((item) => (
+                <li key={item} className="flex items-start gap-2.5 text-sm leading-relaxed text-[var(--muted)]">
+                  <span aria-hidden className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--fg)] opacity-40" />
+                  {item}
+                </li>
+              ))}
+            </ul>
           </div>
         </motion.div>
+      ))}
+    </div>
+  </section>
+);
+
+const achievements = [
+  { title: 'MikroTik Certified Network Associate', issuer: 'MikroTik', date: 'April 2024', image: './Achievment/1743133379367.jpg' },
+  { title: 'Belajar Dasar AI', issuer: 'Dicoding Academy', date: 'September 2025', image: './Achievment/1759060763412.jpg' },
+  { title: 'Wakil Koordinator Desain Grafis 2', issuer: 'Polinema Mengajar', date: 'Desember 2025', image: './Achievment/1768038217665.jpg' },
+  { title: 'Juara 3 Poster Competition Open Air', issuer: 'UKM Radio Kampus Politeknik FM', date: 'Oktober 2025', image: './Achievment/1768038591677.jpg' }
+];
+
+const Achievements = () => (
+  <section id="awards" className="mx-auto w-full max-w-[1440px] px-4 py-12 sm:px-5 sm:py-16 md:px-8 md:py-24">
+    <SectionHead
+      index="05"
+      label="Awards"
+      title={<>Sertifikat &amp;<br />aktivitas</>}
+      copy="Pengakuan dan kegiatan yang saya kerjakan di luar jam kuliah."
+    />
+
+    <div className="grid gap-3 min-[520px]:grid-cols-2 lg:grid-cols-4">
+      {achievements.map((achieve, i) => (
+        <motion.article
+          key={achieve.title}
+          initial={{ opacity: 0, y: 22 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '0px 0px -8% 0px' }}
+          transition={{ duration: 0.45, delay: i * 0.05 }}
+          className="card-invert group flex flex-col overflow-hidden rounded-2xl border border-[var(--line)]"
+        >
+          <div className="relative m-2.5 overflow-hidden rounded-xl bg-[var(--panel)]">
+            <img
+              src={achieve.image}
+              alt={achieve.title}
+              className="aspect-[4/3] w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+            />
+            <span className="absolute bottom-2 left-2 inline-flex items-center gap-1.5 rounded-full bg-black/75 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.08em] text-white">
+              <Trophy size={11} aria-hidden /> {achieve.date}
+            </span>
+          </div>
+
+          <div className="flex flex-1 flex-col p-4 pt-1.5">
+            <h3 className="display text-[15px] font-extrabold uppercase leading-[1.1] tracking-[-0.015em]">
+              {achieve.title}
+            </h3>
+            <p className="card-muted mt-auto pt-4 text-xs text-[var(--muted)]">{achieve.issuer}</p>
+          </div>
+        </motion.article>
+      ))}
+    </div>
+  </section>
+);
+
+const CvSection = () => (
+  <section id="cv" className="mx-auto w-full max-w-[1440px] px-4 py-12 sm:px-5 sm:py-16 md:px-8 md:py-24">
+    <div className="inverse overflow-hidden rounded-3xl border border-[var(--line)]">
+      <div className="grid min-w-0 gap-6 p-4 sm:gap-8 sm:p-6 md:grid-cols-[1fr_1.1fr] md:p-10">
+        <div className="flex flex-col justify-between gap-8">
+          <div>
+            <Eyebrow className="opacity-60">(06) — Curriculum vitae</Eyebrow>
+            <h2 className="display mt-4 text-[clamp(2.4rem,7vw,4.5rem)] font-extrabold uppercase leading-[0.85] tracking-[-0.045em]">
+              Satu<br />dokumen
+            </h2>
+            <p className="mt-5 max-w-sm text-sm leading-relaxed text-[var(--muted)]">
+              Riwayat pendidikan, pengalaman, dan keahlian. Bisa dibaca langsung di halaman ini atau diunduh sebagai PDF.
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-2 sm:flex-row">
+            <a
+              href={CV_URL}
+              download="CV_Afrizal_Rafli.pdf"
+              className="chip chip-solid min-h-12 justify-center px-5"
+            >
+              <Download size={14} aria-hidden /> Unduh PDF
+            </a>
+            <a
+              href={CV_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="chip chip-hover min-h-12 justify-center px-5"
+            >
+              <ArrowUpRight size={14} aria-hidden /> Buka tab baru
+            </a>
+          </div>
+        </div>
+
+        <div className="overflow-hidden rounded-2xl border border-[var(--line)] bg-[var(--panel)]">
+          <div className="flex min-h-48 flex-col items-start justify-center gap-3 p-5 sm:min-h-56 md:hidden">
+            <p className="text-sm leading-relaxed text-[var(--muted)]">Preview CV lebih nyaman dibuka dalam tab baru di layar HP.</p>
+            <a href={CV_URL} target="_blank" rel="noopener noreferrer" className="chip chip-hover min-h-11 px-4">
+              <ArrowUpRight size={14} aria-hidden /> Buka preview CV
+            </a>
+          </div>
+          <iframe
+            src={`${CV_URL}#view=FitH`}
+            title="Curriculum Vitae Afrizal Rafli"
+            className="hidden h-[46svh] min-h-[340px] w-full md:block md:h-full md:min-h-[420px]"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+);
+
+const Contact = () => (
+  <section id="contact" className="mx-auto w-full max-w-[1440px] px-4 pb-8 pt-12 sm:px-5 sm:pb-10 sm:pt-16 md:px-8 md:pt-24">
+    <div className="border-t border-[var(--line-strong)] pt-5">
+      <Eyebrow className="opacity-60">(07) — Contact</Eyebrow>
+
+      <a
+        href="mailto:afrizalrafli27@gmail.com"
+        className="group mt-6 block"
+        aria-label="Kirim email ke Afrizal Rafli"
+      >
+        <span className="wordmark block text-[clamp(2.6rem,12.5vw,10.5rem)] transition-opacity group-hover:opacity-70">
+          Let&rsquo;s talk
+        </span>
+      </a>
+
+      <div className="mt-8 flex flex-col gap-6 border-t border-[var(--line)] pt-6 md:flex-row md:items-center md:justify-between">
+        <a
+          href="mailto:afrizalrafli27@gmail.com"
+          className="display break-all text-base font-extrabold uppercase tracking-[-0.02em] underline decoration-[1.5px] underline-offset-[6px] sm:break-normal sm:text-2xl"
+        >
+          afrizalrafli27@gmail.com
+        </a>
+
+        <div className="flex flex-wrap gap-2">
+          <a href="https://github.com/rizalrfli" target="_blank" rel="noopener noreferrer" className="chip chip-hover min-h-11 px-3">
+            <Github size={13} aria-hidden /> GitHub
+          </a>
+          <a href="https://www.linkedin.com/in/afrizalrafli" target="_blank" rel="noopener noreferrer" className="chip chip-hover min-h-11 px-3">
+            <Linkedin size={13} aria-hidden /> LinkedIn
+          </a>
+          <a href="https://www.instagram.com/afrzalrfli/" target="_blank" rel="noopener noreferrer" className="chip chip-hover min-h-11 px-3">
+            <Instagram size={13} aria-hidden /> Instagram
+          </a>
+          <a href="https://wa.me/6283834079959" target="_blank" rel="noopener noreferrer" className="chip chip-hover min-h-11 px-3">
+            <MessageSquare size={13} aria-hidden /> WhatsApp
+          </a>
+          <a href="mailto:afrizalrafli27@gmail.com" className="chip chip-solid min-h-11 px-3">
+            <Mail size={13} aria-hidden /> Email
+          </a>
+        </div>
       </div>
 
-      <div className="max-w-6xl mx-auto mt-16 pt-6 border-t border-[var(--line)] text-[var(--ink-faint)] text-sm">
-        <p>&copy; 2026 Afrizal Rafli</p>
+      <div className="mt-10 flex flex-col gap-3 border-t border-[var(--line)] pt-5 text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--faint)] sm:flex-row sm:items-center sm:justify-between">
+        <span>&copy; 2026 Afrizal Rafli</span>
+        <span className="flex items-center gap-2">
+          Malang, Indonesia <ArrowRight size={12} aria-hidden />
+        </span>
       </div>
-    </section>
-  );
-};
+    </div>
+  </section>
+);
 
 export default function App() {
-  const [lightsOn, setLightsOn] = useState(() => {
+  const reduceMotion = useReducedMotion();
+  const [loading, setLoading] = useState(() => !reduceMotion);
+  const [night, setNight] = useState(() => {
     if (typeof window === 'undefined') return false;
-    return window.localStorage.getItem('room-lights') === 'on';
+    return window.localStorage.getItem('room') === 'night';
   });
 
   useEffect(() => {
-    document.documentElement.dataset.theme = lightsOn ? 'light' : 'dark';
-    window.localStorage.setItem('room-lights', lightsOn ? 'on' : 'off');
-  }, [lightsOn]);
+    if (reduceMotion) {
+      setLoading(false);
+      return;
+    }
 
-  const toggleLights = () => setLightsOn((current) => !current);
+    const timer = window.setTimeout(() => setLoading(false), 850);
+    return () => window.clearTimeout(timer);
+  }, [reduceMotion]);
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = night ? 'night' : 'day';
+    window.localStorage.setItem('room', night ? 'night' : 'day');
+  }, [night]);
 
   return (
-    <div className="min-h-screen relative font-sans">
-      <Navbar lightsOn={lightsOn} onToggle={toggleLights} />
-      <main className="flex flex-col items-center">
-        <Hero lightsOn={lightsOn} onToggle={toggleLights} />
+    <div className="relative min-h-screen bg-[var(--bg)] font-sans text-[var(--fg)]">
+      <AnimatePresence>
+        {loading && (
+          <motion.div
+            aria-label="Memuat portofolio Afrizal Rafli"
+            role="status"
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-[100] grid place-items-center bg-[var(--bg)]"
+          >
+            <div className="flex flex-col items-center gap-5">
+              <span className="display text-5xl font-extrabold tracking-[-0.08em] sm:text-6xl">AR</span>
+              <span className="h-1 w-32 overflow-hidden bg-[var(--line)]">
+                <motion.span
+                  aria-hidden
+                  initial={{ scaleX: 0, transformOrigin: 'left' }}
+                  animate={{ scaleX: 1 }}
+                  transition={{ duration: 0.72, ease: 'easeInOut' }}
+                  className="block h-full w-full bg-[var(--fg)]"
+                />
+              </span>
+              <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
+                Afrizal Rafli
+              </span>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      <Navbar night={night} onToggle={() => setNight((v) => !v)} />
+      <main>
+        <Hero />
+        <Marquee />
         <About />
         <Projects />
-        <GithubActivity lightsOn={lightsOn} />
+        <GithubActivity night={night} />
         <Experience />
         <Achievements />
         <CvSection />
