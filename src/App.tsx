@@ -8,7 +8,7 @@ import {
 import { GitHubCalendar } from 'react-github-calendar';
 import {
   SiPhp, SiLaravel, SiFilament, SiReact, SiTailwindcss, SiFlutter,
-  SiPostgresql, SiPython, SiPandas, SiLinux, SiDocker, SiCisco, SiFigma
+  SiPostgresql, SiPython, SiPandas, SiLinux, SiDocker, SiCisco, SiMikrotik, SiFigma
 } from 'react-icons/si';
 
 const CV_URL = './CV_Afrizal_Rafli.pdf';
@@ -318,6 +318,7 @@ const strengths = [
     desc: 'Administrasi Linux dan simulasi jaringan kompleks lewat GNS3.',
     skills: [
       skill('Linux', 'https://www.linux.org/', SiLinux, '#FCC624'),
+      skill('MikroTik', 'https://mikrotik.com/', SiMikrotik, '#293239'),
       skill('GNS3', 'https://www.gns3.com/', Network, '#4FA3D1'),
       skill('Docker', 'https://www.docker.com/', SiDocker, '#2496ED'),
       skill('Cisco', 'https://www.cisco.com/', SiCisco, '#1BA0D7')
