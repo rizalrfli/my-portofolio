@@ -8,7 +8,8 @@ import {
 import { GitHubCalendar } from 'react-github-calendar';
 import {
   SiPhp, SiLaravel, SiFilament, SiReact, SiTailwindcss, SiFlutter,
-  SiPostgresql, SiPython, SiPandas, SiLinux, SiDocker, SiCisco, SiMikrotik, SiFigma
+  SiPostgresql, SiPython, SiPandas, SiLinux, SiDocker, SiCisco, SiMikrotik, SiFigma,
+  SiJupyter, SiGooglecolab, SiScikitlearn
 } from 'react-icons/si';
 
 const CV_URL = './CV_Afrizal_Rafli.pdf';
@@ -310,7 +311,10 @@ const strengths = [
     desc: 'Python, Pandas, dan pemodelan statistik dengan Random Forest Regression.',
     skills: [
       skill('Python', 'https://www.python.org/', SiPython, '#3776AB'),
-      skill('Pandas', 'https://pandas.pydata.org/', SiPandas, '#E70488')
+      skill('Pandas', 'https://pandas.pydata.org/', SiPandas, '#E70488'),
+      skill('Jupyter', 'https://jupyter.org/', SiJupyter, '#F37626'),
+      skill('Google Colab', 'https://colab.research.google.com/', SiGooglecolab, '#F9AB00'),
+      skill('Scikit-learn', 'https://scikit-learn.org/', SiScikitlearn, '#F7931E')
     ]
   },
   {
