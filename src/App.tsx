@@ -237,12 +237,18 @@ const Hero = () => {
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.4 }}
-                className="ml-auto hidden max-w-[21rem] flex-wrap justify-end gap-1.5 md:flex"
+                className="ml-auto hidden max-w-[21rem] flex-col items-end gap-1.5 md:flex"
               >
-                <span className="chip chip-solid">Laravel</span>
-                {['React', 'PostgreSQL', 'PHP', 'Tailwind', 'Figma', 'Docker', 'GNS3', 'Python'].map((tag) => (
-                  <span key={tag} className="chip chip-hover cursor-default">{tag}</span>
-                ))}
+                <div className="flex flex-wrap justify-end gap-1.5">
+                  {['GNS3', 'MikroTik', 'Cisco', 'Linux'].map((tag) => (
+                    <span key={tag} className="chip chip-solid cursor-default">{tag}</span>
+                  ))}
+                </div>
+                <div className="flex flex-wrap justify-end gap-1.5">
+                  {['Docker', 'Laravel', 'React', 'PostgreSQL', 'Python'].map((tag) => (
+                    <span key={tag} className="chip chip-hover cursor-default">{tag}</span>
+                  ))}
+                </div>
               </motion.div>
             </div>
           </div>
@@ -253,7 +259,7 @@ const Hero = () => {
 };
 
 const Marquee = () => {
-  const words = ['Web Developer', 'Network Engineer', 'Data Science', 'Graphic Design', 'Project Manager'];
+  const words = ['Network Engineer', 'Web Developer', 'Data Science', 'Graphic Design', 'Project Manager'];
   const row = [...words, ...words];
 
   return (
@@ -285,7 +291,31 @@ type Skill = {
 
 const skill = (name: string, href: string, icon: Skill['icon'], color: string): Skill => ({ name, href, icon, color });
 
-const strengths = [
+type Strength = {
+  title: string;
+  desc: string;
+  points?: string[];
+  skills: Skill[];
+};
+
+const strengths: Strength[] = [
+  {
+    title: 'Network & Infrastructure',
+    desc: 'Fokus utama saya: routing, switching, dan administrasi jaringan — MikroTik, Cisco, serta simulasi topologi kompleks di GNS3.',
+    points: [
+      'Routing & switching: OSPF, VLAN, NAT',
+      'Firewall dan manajemen bandwidth MikroTik',
+      'Simulasi topologi jaringan di GNS3',
+      'Administrasi server Linux'
+    ],
+    skills: [
+      skill('MikroTik', 'https://mikrotik.com/', SiMikrotik, '#293239'),
+      skill('Cisco', 'https://www.cisco.com/', SiCisco, '#1BA0D7'),
+      skill('GNS3', 'https://www.gns3.com/', Network, '#4FA3D1'),
+      skill('Linux', 'https://www.linux.org/', SiLinux, '#FCC624'),
+      skill('Docker', 'https://www.docker.com/', SiDocker, '#2496ED')
+    ]
+  },
   {
     title: 'Web Development',
     desc: 'PHP, Laravel, dan Filament untuk aplikasi bisnis yang rapi dan tahan lama.',
@@ -315,17 +345,6 @@ const strengths = [
       skill('Jupyter', 'https://jupyter.org/', SiJupyter, '#F37626'),
       skill('Google Colab', 'https://colab.research.google.com/', SiGooglecolab, '#F9AB00'),
       skill('Scikit-learn', 'https://scikit-learn.org/', SiScikitlearn, '#F7931E')
-    ]
-  },
-  {
-    title: 'Infrastructure',
-    desc: 'Administrasi Linux dan simulasi jaringan kompleks lewat GNS3.',
-    skills: [
-      skill('Linux', 'https://www.linux.org/', SiLinux, '#FCC624'),
-      skill('MikroTik', 'https://mikrotik.com/', SiMikrotik, '#293239'),
-      skill('GNS3', 'https://www.gns3.com/', Network, '#4FA3D1'),
-      skill('Docker', 'https://www.docker.com/', SiDocker, '#2496ED'),
-      skill('Cisco', 'https://www.cisco.com/', SiCisco, '#1BA0D7')
     ]
   },
   {
@@ -377,7 +396,7 @@ const About = () => (
       index="01"
       label="About"
       title={<>Skill<br />yang saya kuasai</>}
-      copy="Campuran pengembangan software, basis data, analisis data, dan desain."
+      copy="Kekuatan utama di jaringan komputer, ditopang pengembangan software, basis data, data, dan desain."
     />
 
     <div className="grid gap-3 min-[520px]:grid-cols-2 lg:grid-cols-3">
@@ -392,16 +411,30 @@ const About = () => (
             }`}
         >
           <div>
-            <div className="mb-5 flex items-start justify-between">
+            <div className="mb-5 flex items-start justify-between gap-2">
               <span className="text-[10px] font-semibold tracking-[0.2em] opacity-50">
                 0{index + 1}
               </span>
-              <ArrowUpRight size={18} aria-hidden className="opacity-40" />
+              {index === 0 ? (
+                <span className="chip card-flag px-2.5 py-1">Fokus utama</span>
+              ) : (
+                <ArrowUpRight size={18} aria-hidden className="opacity-40" />
+              )}
             </div>
             <h3 className="display text-2xl font-extrabold uppercase leading-[0.95] tracking-[-0.03em]">
               {item.title}
             </h3>
             <p className="card-muted mt-3 text-sm leading-relaxed text-[var(--muted)]">{item.desc}</p>
+            {item.points && (
+              <ul className="mt-4 grid gap-2 border-t border-[var(--line)] pt-4">
+                {item.points.map((point) => (
+                  <li key={point} className="flex items-start gap-2.5 text-sm leading-relaxed text-[var(--muted)]">
+                    <span aria-hidden className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--fg)] opacity-45" />
+                    {point}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
 
           <div className="flex flex-wrap gap-1.5">

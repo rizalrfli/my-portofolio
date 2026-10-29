@@ -152,6 +152,8 @@ html { scroll-padding-top: 6rem; }
   border-color: color-mix(in srgb, var(--solid-ink) 32%, transparent);
   color: var(--solid-ink);
 }
+.card-invert .card-flag { background: var(--solid); color: var(--solid-ink); border-color: var(--solid); }
+.card-invert:hover .card-flag { background: var(--solid-ink); color: var(--solid); border-color: var(--solid-ink); }
 
 .marquee-track {
   display: flex;
