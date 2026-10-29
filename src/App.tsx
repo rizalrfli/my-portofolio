@@ -182,15 +182,6 @@ const Navbar = ({ lightsOn, onToggle }: { lightsOn: boolean; onToggle: () => voi
           {navLinks.map((link) => (
             <a key={link.href} href={link.href} className={linkClass}>{link.label}</a>
           ))}
-          <a
-            href={CV_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="min-h-11 flex items-center gap-2 text-[var(--ink-strong)] hover:text-[var(--accent)] transition-colors"
-          >
-            <FileText size={16} aria-hidden />
-            CV
-          </a>
           <button
             type="button"
             onClick={onToggle}
@@ -237,16 +228,6 @@ const Navbar = ({ lightsOn, onToggle }: { lightsOn: boolean; onToggle: () => voi
               {link.label}
             </a>
           ))}
-          <a
-            href={CV_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => setIsOpen(false)}
-            className={`text-lg font-medium text-[var(--ink-strong)] gap-2 ${linkClass}`}
-          >
-            <FileText size={18} aria-hidden />
-            CV
-          </a>
         </motion.div>
       )}
     </nav>
