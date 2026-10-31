@@ -165,7 +165,7 @@ const Portrait = () => {
       initial={reduceMotion ? false : { opacity: 0, y: 28 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ type: 'spring', stiffness: 70, damping: 18, delay: 0.1 }}
-      className="pointer-events-none absolute bottom-0 left-1/2 z-10 h-[38svh] w-auto max-w-none -translate-x-1/2 object-contain object-bottom drop-shadow-[0_28px_55px_rgba(24,32,0,0.28)] sm:h-[48svh] lg:left-[72%] lg:h-[92%] xl:left-[74%] xl:h-[98%]"
+      className="pointer-events-none relative z-10 mx-auto mt-5 block h-[24svh] max-h-64 w-auto max-w-full translate-x-0 object-contain object-bottom drop-shadow-[0_18px_35px_rgba(24,32,0,0.24)] sm:h-[30svh] sm:max-h-80 lg:absolute lg:bottom-0 lg:left-[72%] lg:mx-0 lg:mt-0 lg:h-[92%] lg:max-h-none lg:w-auto lg:max-w-none lg:-translate-x-1/2 lg:drop-shadow-[0_28px_55px_rgba(24,32,0,0.28)] xl:left-[74%] xl:h-[98%]"
     />
   );
 };
@@ -211,14 +211,14 @@ const Hero = () => {
         </div>
 
         {/* Main Content + Portrait Stage */}
-        <div className="relative my-auto grid flex-1 items-center gap-8 pt-6 pb-44 sm:pb-56 lg:grid-cols-[1.15fr_0.85fr] lg:py-10">
+        <div className="relative my-auto grid flex-1 items-center gap-5 pt-5 pb-8 sm:gap-8 sm:pt-6 sm:pb-10 lg:grid-cols-[1.15fr_0.85fr] lg:py-10">
           {/* Background Wordmark */}
           <motion.div
             aria-hidden
             initial={{ opacity: 0, y: 34 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
-            className="pointer-events-none absolute inset-x-0 bottom-[6%] z-0 select-none text-center lg:bottom-[4%] lg:text-right"
+            className="pointer-events-none absolute inset-x-0 bottom-[3%] z-0 select-none text-center lg:bottom-[4%] lg:text-right"
           >
             <span className="wordmark block text-[clamp(3.2rem,16vw,15.5rem)] text-[var(--wordmark)] opacity-80">
               SYSADMIN
@@ -271,19 +271,19 @@ const Hero = () => {
             <div className="mt-7 grid grid-cols-2 gap-2.5 rounded-2xl border border-[var(--line-strong)] bg-[var(--bg)]/85 p-3.5 backdrop-blur-md sm:grid-cols-4">
               <div>
                 <span className="mono block text-[10px] uppercase opacity-60">Certification</span>
-                <span className="display mt-0.5 block text-sm font-extrabold uppercase">MikroTik MTCNA</span>
+              <span className="display mt-0.5 block text-[clamp(0.7rem,3.5vw,0.875rem)] font-extrabold uppercase leading-tight">MikroTik MTCNA</span>
               </div>
               <div>
                 <span className="mono block text-[10px] uppercase opacity-60">Core OS</span>
-                <span className="display mt-0.5 block text-sm font-extrabold uppercase">Ubuntu / Debian</span>
+              <span className="display mt-0.5 block text-[clamp(0.7rem,3.5vw,0.875rem)] font-extrabold uppercase leading-tight">Ubuntu / Debian</span>
               </div>
               <div>
                 <span className="mono block text-[10px] uppercase opacity-60">Routing &amp; Lab</span>
-                <span className="display mt-0.5 block text-sm font-extrabold uppercase">OSPF · VLAN · GNS3</span>
+              <span className="display mt-0.5 block text-[clamp(0.7rem,3.5vw,0.875rem)] font-extrabold uppercase leading-tight">OSPF · VLAN · GNS3</span>
               </div>
               <div>
                 <span className="mono block text-[10px] uppercase opacity-60">Field Ops</span>
-                <span className="display mt-0.5 block text-sm font-extrabold uppercase">40+ Node &amp; K3 TI</span>
+              <span className="display mt-0.5 block text-[clamp(0.7rem,3.5vw,0.875rem)] font-extrabold uppercase leading-tight">40+ Node &amp; K3 TI</span>
               </div>
             </div>
           </motion.div>
@@ -294,7 +294,7 @@ const Hero = () => {
         </div>
 
         {/* Bottom Infrastructure Badge Strip */}
-        <div className="relative z-20 flex flex-wrap items-center justify-between gap-2 border-t border-[var(--line)] py-3">
+          <div className="relative z-20 flex flex-wrap items-start justify-between gap-2 border-t border-[var(--line)] py-3">
           <span className="mono text-[10px] uppercase tracking-[0.16em] opacity-70">
             INFRASTRUCTURE STACK //
           </span>
