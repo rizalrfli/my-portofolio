@@ -184,13 +184,7 @@ const Hero = () => {
         {/* Top Bar: Telemetry & Credentials Summary */}
         <div className="mt-5 flex flex-wrap items-start justify-between gap-4 border-b border-[var(--line)] pb-4 sm:mt-6">
           <div className="flex flex-wrap items-center gap-2.5">
-            <span className="inline-flex items-center gap-2 rounded-full border border-[var(--line-strong)] bg-[var(--panel)] px-3 py-1">
-              <span className="pulse-dot inline-block h-2 w-2 rounded-full bg-[var(--fg)]" />
-              <span className="mono text-[10px] font-bold uppercase tracking-[0.16em]">
-                SYS: ONLINE · OPEN FOR INTERNSHIP 2026
-              </span>
-            </span>
-            <span className="mono hidden rounded-full border border-[var(--line)] px-3 py-1 text-[10px] uppercase tracking-[0.14em] opacity-75 sm:inline-block">
+            <span className="mono rounded-full border border-[var(--line)] px-3 py-1 text-[10px] uppercase tracking-[0.14em] opacity-75">
               ROLE: SYSADMIN / NETWORK ENGINEER
             </span>
           </div>
@@ -247,7 +241,7 @@ const Hero = () => {
             </h1>
 
             <p className="mt-4 max-w-xl text-sm leading-relaxed text-[var(--muted)] sm:text-base">
-              Mahasiswa Teknik Informatika yang berfokus pada administrasi sistem Linux, manajemen jaringan (Routing, Switching, Firewall), automasi infrastruktur, dan keamanan sistem. Berpengalaman membangun <em>home-lab</em>, mengelola <em>virtual private server</em> (VPS), serta menerapkan standar Keselamatan dan Kesehatan Kerja (K3) perangkat jaringan.
+              Mahasiswa Teknik Informatika yang berfokus pada administrasi sistem Linux dan manajemen jaringan (Routing, Switching, Firewall).
             </p>
 
             {/* 3 CTA Buttons mandated by Evaluation Spec */}
@@ -305,7 +299,7 @@ const Hero = () => {
             INFRASTRUCTURE STACK //
           </span>
           <div className="flex flex-wrap gap-1.5">
-            {['MikroTik RouterOS', 'Cisco IOS', 'Linux Server', 'Docker', 'Proxmox VE', 'Nginx', 'UFW & Fail2Ban', 'Cloudflare', 'WireGuard VPN'].map((tag, i) => (
+            {['MikroTik RouterOS', 'Cisco IOS', 'Linux Server', 'Docker', 'Cloudflare', 'WireGuard VPN'].map((tag, i) => (
               <span key={tag} className={`chip cursor-default ${i < 4 ? 'chip-solid' : 'bg-[var(--bg)]/85'}`}>
                 {tag}
               </span>
@@ -425,17 +419,15 @@ const infraCategories: InfraCategory[] = [
     code: 'STACK-02 // SYSADMIN',
     title: 'System Administration',
     flag: 'Core Competency',
-    desc: 'Instalasi, konfigurasi, otomasi, dan pemeliharaan server Linux maupun Windows Server untuk menjamin ketersediaan layanan dan keamanan akses.',
+    desc: 'Instalasi, konfigurasi, otomasi, dan pemeliharaan server Linux untuk menjamin ketersediaan layanan dan keamanan akses.',
     points: [
       'Linux Server Administration (Ubuntu Server, Debian, Rocky/CentOS)',
-      'Windows Server (Active Directory, DNS, DHCP)',
       'Bash Shell Scripting untuk otomasi backup & maintenance',
       'SSH Hardening (Key-based Auth, Port Custom, Disable Root)',
       'Manajemen layanan dengan Systemd & penjadwalan Cronjobs'
     ],
     badges: [
       { name: 'Linux (Ubuntu, Debian, Rocky)', icon: SiLinux },
-      { name: 'Windows Server (AD, DNS, DHCP)', icon: Server },
       { name: 'Docker & Reverse Proxy', icon: SiDocker },
       { name: 'Bash Scripting', icon: Terminal },
       { name: 'SSH & Firewall Hardening', icon: ShieldCheck },
@@ -561,60 +553,8 @@ type LabProject = {
 
 const networkLabs: LabProject[] = [
   {
-    id: 'campus-network-design',
-    code: 'LAB-01 // TOPOLOGY & ROUTING',
-    title: 'Enterprise Campus/Office Network Design & Simulation',
-    category: 'Network Topology & Routing',
-    tools: ['Cisco Packet Tracer / GNS3', 'VLAN (802.1Q)', 'OSPF Multi-Area', 'ACL Firewall', 'HSRP / Redundancy'],
-    problem:
-      'Jaringan kantor/kampus dengan satu broadcast domain datar (flat network) rentan mengalami broadcast storm, sulitnya isolasi keamanan antar-departemen, serta risiko single point of failure saat satu jalur penghubung putus.',
-    solution:
-      'Merancang topologi jaringan hierarkis 3-Tier (Core, Distribution, Access layer) dengan segmentasi VLAN antar departemen (IT/Server, Finance, HR, Guest WiFi), routing dinamis OSPF dengan failover otomatis, serta pembatasan akses trafik sensitif menggunakan Extended Access Control List (ACL).',
-    topologySummary: [
-      'Core / Edge Layer (R1-EDGE-GW): Cisco 2911/4321 menjalankan OSPF Area 0, Default Route, dan PAT/NAT Overload ke arah ISP (203.0.113.0/30)',
-      'Distribution Layer (DSW1-CORE-L3): Multilayer Switch 3560/3650 menangani Inter-VLAN Routing (SVI), DHCP Relay (ip helper-address 10.10.10.10), dan Extended ACL',
-      'Access Layer (SW-SERVER & SW-ACCESS-FL1): Switch 2960 dengan 802.1Q Trunking, Port Security (Sticky MAC), BPDU Guard, & SSHv2 Hardening'
-    ],
-    vlanTable: [
-      { vlan: 'VLAN 10', name: 'SERVER_FARM', subnet: '10.10.10.0/24', gateway: '10.10.10.1', policy: 'DHCP/DNS (10.10.10.10) & Web/Syslog (10.10.10.20)' },
-      { vlan: 'VLAN 20', name: 'IT_SYSADMIN', subnet: '10.10.20.0/24', gateway: '10.10.20.1', policy: 'Full Access (SSH Management, Server Farm & Internet)' },
-      { vlan: 'VLAN 30', name: 'FINANCE_HR', subnet: '10.10.30.0/24', gateway: '10.10.30.1', policy: 'Akses ERP Web & Internet (Blocked from SSH Device Mgmt)' },
-      { vlan: 'VLAN 99', name: 'GUEST_WIFI', subnet: '192.168.99.0/24', gateway: '192.168.99.1', policy: 'Isolated via Extended ACL (Internet & DHCP/DNS Only)' }
-    ],
-    downloadConfigUrl: './labs/enterprise-campus-config.txt',
-    configTitle: 'enterprise-campus-config.txt (Cisco IOS)',
-    configSnippet: `! VLAN & Trunking Configuration
-vlan 10
- name SERVER_FARM
-vlan 30
- name FINANCE_DEPT
-vlan 99
- name GUEST_WIFI
-!
-interface GigabitEthernet0/1
- description TRUNK_TO_ACCESS_SW
- switchport trunk encapsulation dot1q
- switchport mode trunk
- switchport trunk allowed vlan 10,20,30,99
-!
-! OSPF Dynamic Routing
-router ospf 1
- router-id 10.0.0.2
- passive-interface default
- no passive-interface GigabitEthernet0/24
- network 10.10.0.0 0.0.255.255 area 0
-!
-! Extended ACL: Block Guest VLAN (99) from Server Farm (10)
-ip access-list extended ACL_ISOLATE_GUEST
- deny ip 192.168.99.0 0.0.0.255 10.10.10.0 0.0.0.255
- permit ip any any`,
-    primaryBtnLabel: 'Lihat Diagram Topologi',
-    secondaryBtnLabel: 'Lihat Konfigurasi CLI',
-    repoUrl: 'https://github.com/rizalrfli'
-  },
-  {
     id: 'vlan-trunk-intervlan',
-    code: 'LAB-02 // SWITCHING & VLAN',
+    code: 'LAB-01 // SWITCHING & VLAN',
     title: 'VLAN Segmentation, 802.1Q Trunk & Router-on-a-Stick',
     category: 'Switching & Inter-VLAN Routing',
     tools: ['Cisco Packet Tracer 9.0', 'VLAN 10/20/99', '802.1Q Trunking', 'Router-on-a-Stick', 'Port-Security Sticky'],
@@ -664,7 +604,7 @@ interface FastEthernet0/1
   },
   {
     id: 'static-routing-multirouter',
-    code: 'LAB-03 // ROUTING & MULTI-ROUTER',
+    code: 'LAB-02 // ROUTING & MULTI-ROUTER',
     title: 'Static Routing & Inter-LAN Connectivity Across Three Routers',
     category: 'Network Routing',
     tools: ['Cisco Packet Tracer 9.0', 'Cisco IOS 2911', 'Static & Default Route', 'DHCP Server', 'Traceroute Validation'],
@@ -708,7 +648,7 @@ ip route 192.168.2.0 255.255.255.0 10.2.23.1
   },
   {
     id: 'ospf-single-area',
-    code: 'LAB-04 // DYNAMIC ROUTING',
+    code: 'LAB-03 // DYNAMIC ROUTING',
     title: 'OSPF Single-Area Convergence & Failover Behaviour',
     category: 'Dynamic Routing',
     tools: ['Cisco Packet Tracer 9.0', 'OSPF Area 0', 'DR/BDR Election', 'Passive Interface', 'Loopback Router-ID'],
@@ -811,7 +751,7 @@ const Projects = ({
               activeTab === 'infra' ? 'chip-solid' : 'chip-hover'
             }`}
           >
-            <Network size={14} aria-hidden /> Network &amp; SysAdmin Labs (04)
+            <Network size={14} aria-hidden /> Network &amp; SysAdmin Labs (03)
           </button>
           <button
             type="button"
@@ -1706,32 +1646,8 @@ const Experience = () => (
 );
 
 /* ============================================================================
-   SECTION 07: GITHUB ACTIVITY + PINNED SYSADMIN REPOSITORIES
+   SECTION 06: GITHUB ACTIVITY
    ============================================================================ */
-const pinnedRepos = [
-  {
-    name: 'linux-sysadmin-scripts',
-    lang: 'Shell / Bash',
-    desc: 'Kumpulan script Bash otomasi server Linux: SSH hardening, UFW firewall provisioning, rotasi backup otomatis via Cron, dan health-check layanan.',
-    tags: ['bash', 'ubuntu-server', 'ufw', 'fail2ban', 'cron'],
-    url: 'https://github.com/rizalrfli?tab=repositories'
-  },
-  {
-    name: 'network-topologies-lab',
-    lang: 'RouterOS / Cisco IOS',
-    desc: 'Dokumentasi arsitektur topologi GNS3 & Cisco Packet Tracer (.pkt), skema VLAN/OSPF multi-area, serta script konfigurasi MikroTik (.rsc).',
-    tags: ['gns3', 'mikrotik-rsc', 'cisco-pkt', 'ospf', 'vlan'],
-    url: 'https://github.com/rizalrfli?tab=repositories'
-  },
-  {
-    name: 'homelab-docker-compose',
-    lang: 'Docker / YAML',
-    desc: 'Konfigurasi Infrastructure as Code (Docker Compose) untuk layanan self-hosted: Nginx Reverse Proxy, Prometheus, Grafana, dan Uptime Kuma.',
-    tags: ['docker-compose', 'nginx', 'prometheus', 'grafana', 'uptime-kuma'],
-    url: 'https://github.com/rizalrfli?tab=repositories'
-  }
-];
-
 const GithubActivity = ({ night }: { night: boolean }) => (
   <section id="activity" className="inverse border-y border-[var(--line)] py-16 md:py-24">
     <div className="mx-auto w-full max-w-[1440px] px-5 md:px-8">
@@ -1750,43 +1666,6 @@ const GithubActivity = ({ night }: { night: boolean }) => (
         >
           <Github size={13} aria-hidden /> github.com/rizalrfli <ArrowUpRight size={13} aria-hidden />
         </a>
-      </div>
-
-      {/* Pinned SysAdmin & Network Repositories */}
-      <div className="mb-8 grid gap-4 lg:grid-cols-3">
-        {pinnedRepos.map((repo) => (
-          <a
-            key={repo.name}
-            href={repo.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group flex flex-col justify-between rounded-2xl border border-[var(--line)] bg-[var(--panel)] p-5 transition-colors hover:border-[var(--line-strong)]"
-          >
-            <div>
-              <div className="flex items-center justify-between gap-2">
-                <div className="flex items-center gap-2">
-                  <FolderGit2 size={16} aria-hidden />
-                  <span className="mono text-sm font-bold tracking-tight">{repo.name}</span>
-                </div>
-                <ArrowUpRight size={15} aria-hidden className="opacity-60 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-              </div>
-              <p className="mt-3 text-xs leading-relaxed text-[var(--muted)]">
-                {repo.desc}
-              </p>
-            </div>
-
-            <div className="mt-5 flex flex-wrap items-center justify-between gap-2 border-t border-[var(--line)] pt-3.5">
-              <span className="mono text-[10px] font-bold uppercase opacity-80">{repo.lang}</span>
-              <div className="flex flex-wrap gap-1">
-                {repo.tags.slice(0, 3).map((tag) => (
-                  <span key={tag} className="rounded border border-[var(--line)] px-2 py-0.5 mono text-[9px] opacity-75">
-                    #{tag}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </a>
-        ))}
       </div>
 
       {/* GitHub Contribution Calendar */}
