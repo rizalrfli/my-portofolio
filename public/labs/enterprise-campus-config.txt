@@ -1,0 +1,327 @@
+================================================================================
+PROJECT : ENTERPRISE CAMPUS / OFFICE 3-TIER NETWORK DESIGN & SECURITY LAB
+AUTHOR  : Afrizal Rafli Kusuma Wardana (System Administrator & Network Engineer)
+TOOLS   : Cisco Packet Tracer (Cisco IOS 15.x)
+FEATURES: 3-Tier Hierarchy (Core/Edge, Distribution L3, Access L2), 802.1Q VLAN,
+          Inter-VLAN Routing (SVI), DHCP Relay (ip helper-address), OSPF Area 0,
+          PAT/NAT Overload, Port-Security, SSHv2 Hardening, & Extended ACLs.
+================================================================================
+
+--------------------------------------------------------------------------------
+BAGIAN 1: TABEL ALAMAT IP, VLAN, & KEBIJAKAN FIREWALL (ACL)
+--------------------------------------------------------------------------------
+- VLAN 10 (SERVER_FARM) : 10.10.10.0/24 | Gateway: 10.10.10.1
+  * SRV-DHCP-DNS        : 10.10.10.10/24 (DHCP Pools + Internal DNS)
+  * SRV-WEB-SYSLOG      : 10.10.10.20/24 (Internal ERP Web + Syslog Receiver)
+- VLAN 20 (IT_SYSADMIN) : 10.10.20.0/24 | Gateway: 10.10.20.1 (Full Access + SSH)
+- VLAN 30 (FINANCE_HR)  : 10.10.30.0/24 | Gateway: 10.10.30.1 (ERP + Internet)
+- VLAN 99 (GUEST_WIFI)  : 192.168.99.0/24| Gateway: 192.168.99.1 (Internet Only)
+- TRANSIT DSW1 <-> R1   : 10.0.0.0/30    | DSW1: 10.0.0.2, R1: 10.0.0.1
+- WAN R1 <-> ISP        : 203.0.113.0/30 | R1: 203.0.113.2, ISP: 203.0.113.1
+
+--------------------------------------------------------------------------------
+BAGIAN 2: KONFIGURASI SWITCH ACCESS SERVER (SW-SERVER - Cisco 2960)
+Hubungkan:
+- Gig0/1  -> DSW1-CORE-L3 (Gig1/0/1)
+- Fa0/1   -> SRV-DHCP-DNS (10.10.10.10)
+- Fa0/2   -> SRV-WEB-SYSLOG (10.10.10.20)
+--------------------------------------------------------------------------------
+enable
+configure terminal
+hostname SW-SERVER
+no ip domain-lookup
+service password-encryption
+banner motd # UNAUTHORIZED ACCESS TO SERVER SWITCH IS PROHIBITED #
+
+vlan 10
+ name SERVER_FARM
+exit
+
+interface range FastEthernet0/1 - 2
+ description SERVER_FARM_NODES
+ switchport mode access
+ switchport access vlan 10
+ spanning-tree portfast
+exit
+
+interface GigabitEthernet0/1
+ description TRUNK_TO_DSW1_CORE_L3
+ switchport mode trunk
+ switchport trunk allowed vlan 10
+exit
+
+end
+write memory
+
+
+--------------------------------------------------------------------------------
+BAGIAN 3: KONFIGURASI SWITCH ACCESS LANTAI 1 (SW-ACCESS-FL1 - Cisco 2960)
+Hubungkan:
+- Gig0/1  -> DSW1-CORE-L3 (Gig1/0/2)
+- Fa0/1   -> PC-SYSADMIN (VLAN 20)
+- Fa0/2   -> PC-FINANCE (VLAN 30)
+- Fa0/3   -> AP-GUEST-WIFI (VLAN 99)
+--------------------------------------------------------------------------------
+enable
+configure terminal
+hostname SW-ACCESS-FL1
+no ip domain-lookup
+service password-encryption
+ip domain-name afrizalportofolio.local
+crypto key generate rsa general-keys modulus 2048
+username sysadmin privilege 15 secret SysAdmin#2026!
+ip ssh version 2
+
+vlan 20
+ name IT_SYSADMIN
+vlan 30
+ name FINANCE_HR
+vlan 99
+ name GUEST_WIFI
+exit
+
+! Port VLAN 20 (IT SysAdmin) + Port Security
+interface FastEthernet0/1
+ description WORKSTATION_IT_SYSADMIN
+ switchport mode access
+ switchport access vlan 20
+ switchport port-security
+ switchport port-security maximum 2
+ switchport port-security mac-address sticky
+ switchport port-security violation restrict
+ spanning-tree portfast
+ spanning-tree bpduguard enable
+exit
+
+! Port VLAN 30 (Finance & HR) + Port Security
+interface FastEthernet0/2
+ description WORKSTATION_FINANCE_DEPT
+ switchport mode access
+ switchport access vlan 30
+ switchport port-security
+ switchport port-security maximum 1
+ switchport port-security mac-address sticky
+ switchport port-security violation restrict
+ spanning-tree portfast
+ spanning-tree bpduguard enable
+exit
+
+! Port VLAN 99 (Guest WiFi Access Point)
+interface FastEthernet0/3
+ description AP_GUEST_WIFI_ISOLATED
+ switchport mode access
+ switchport access vlan 99
+ spanning-tree portfast
+exit
+
+! Matikan port yang tidak terpakai (Best Practice Hardening K3/Security)
+interface range FastEthernet0/4 - 24
+ description UNUSED_PORTS_SHUTDOWN
+ switchport mode access
+ shutdown
+exit
+
+! Uplink Trunk ke DSW1
+interface GigabitEthernet0/1
+ description TRUNK_TO_DSW1_CORE_L3
+ switchport mode trunk
+ switchport trunk allowed vlan 20,30,99
+exit
+
+! Hardening VTY (Hanya izinkan SSH)
+line vty 0 15
+ login local
+ transport input ssh
+ exec-timeout 5 0
+exit
+
+end
+write memory
+
+
+--------------------------------------------------------------------------------
+BAGIAN 4: KONFIGURASI DISTRIBUTION L3 SWITCH (DSW1-CORE-L3 - Cisco 3560/3650)
+Hubungkan:
+- Gig0/1 (atau Gig1/0/1) -> SW-SERVER (Gig0/1)
+- Gig0/2 (atau Gig1/0/2) -> SW-ACCESS-FL1 (Gig0/1)
+- Gig0/24 (atau Gig1/0/24) -> R1-EDGE-GW (Gig0/0)
+--------------------------------------------------------------------------------
+enable
+configure terminal
+hostname DSW1-CORE-L3
+no ip domain-lookup
+service password-encryption
+ip routing
+
+vlan 10
+ name SERVER_FARM
+vlan 20
+ name IT_SYSADMIN
+vlan 30
+ name FINANCE_HR
+vlan 99
+ name GUEST_WIFI
+exit
+
+! Trunk ke SW-SERVER
+interface GigabitEthernet0/1
+ description DOWNLINK_TO_SW_SERVER
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport trunk allowed vlan 10
+exit
+
+! Trunk ke SW-ACCESS-FL1
+interface GigabitEthernet0/2
+ description DOWNLINK_TO_SW_ACCESS_FL1
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport trunk allowed vlan 20,30,99
+exit
+
+! SVI Gateways + DHCP Relay (ip helper-address ke SRV-DHCP 10.10.10.10)
+interface Vlan10
+ description GW_SERVER_FARM
+ ip address 10.10.10.1 255.255.255.0
+ no shutdown
+exit
+
+interface Vlan20
+ description GW_IT_SYSADMIN
+ ip address 10.10.20.1 255.255.255.0
+ ip helper-address 10.10.10.10
+ no shutdown
+exit
+
+interface Vlan30
+ description GW_FINANCE_HR
+ ip address 10.10.30.1 255.255.255.0
+ ip helper-address 10.10.10.10
+ no shutdown
+exit
+
+interface Vlan99
+ description GW_GUEST_WIFI
+ ip address 192.168.99.1 255.255.255.0
+ ip helper-address 10.10.10.10
+ ip access-group ACL_ISOLATE_GUEST in
+ no shutdown
+exit
+
+! Routed Port (Layer 3) menuju Edge Router R1
+interface GigabitEthernet0/24
+ description UPLINK_L3_TO_R1_EDGE_GW
+ no switchport
+ ip address 10.0.0.2 255.255.255.252
+ no shutdown
+exit
+
+! Extended ACL: Guest WiFi hanya boleh akses DHCP/DNS ke 10.10.10.10 dan Internet,
+! tetapi DIBLOKIR dari seluruh jaringan internal (VLAN 10, 20, 30)
+ip access-list extended ACL_ISOLATE_GUEST
+ remark Allow DHCP and DNS to Server 10.10.10.10
+ permit udp 192.168.99.0 0.0.0.255 host 10.10.10.10 eq bootps
+ permit udp 192.168.99.0 0.0.0.255 host 10.10.10.10 eq domain
+ remark Block Guest from accessing Internal RFC1918 Subnets
+ deny ip 192.168.99.0 0.0.0.255 10.10.10.0 0.0.0.255
+ deny ip 192.168.99.0 0.0.0.255 10.10.20.0 0.0.0.255
+ deny ip 192.168.99.0 0.0.0.255 10.10.30.0 0.0.0.255
+ remark Allow Guest to Internet
+ permit ip 192.168.99.0 0.0.0.255 any
+exit
+
+! OSPF Dynamic Routing Area 0
+router ospf 1
+ router-id 2.2.2.2
+ passive-interface default
+ no passive-interface GigabitEthernet0/24
+ network 10.0.0.0 0.0.0.3 area 0
+ network 10.10.10.0 0.0.0.255 area 0
+ network 10.10.20.0 0.0.0.255 area 0
+ network 10.10.30.0 0.0.0.255 area 0
+ network 192.168.99.0 0.0.0.255 area 0
+exit
+
+logging host 10.10.10.20
+logging trap informational
+
+end
+write memory
+
+
+--------------------------------------------------------------------------------
+BAGIAN 5: KONFIGURASI EDGE ROUTER (R1-EDGE-GW - Cisco 2911 / 4321)
+Hubungkan:
+- Gig0/0 -> DSW1-CORE-L3 (Gig0/24)
+- Gig0/1 -> ISP-ROUTER (Gig0/0)
+--------------------------------------------------------------------------------
+enable
+configure terminal
+hostname R1-EDGE-GW
+no ip domain-lookup
+service password-encryption
+
+interface GigabitEthernet0/0
+ description LAN_TRANSIT_TO_DSW1
+ ip address 10.0.0.1 255.255.255.252
+ ip nat inside
+ no shutdown
+exit
+
+interface GigabitEthernet0/1
+ description WAN_LINK_TO_ISP
+ ip address 203.0.113.2 255.255.255.252
+ ip nat outside
+ no shutdown
+exit
+
+! Default Route ke ISP
+ip route 0.0.0.0 0.0.0.0 203.0.113.1
+
+! OSPF Area 0 + Propagasi Default Route ke DSW1
+router ospf 1
+ router-id 1.1.1.1
+ passive-interface GigabitEthernet0/1
+ network 10.0.0.0 0.0.0.3 area 0
+ default-information originate
+exit
+
+! PAT / NAT Overload untuk seluruh subnet internal
+access-list 1 permit 10.10.0.0 0.0.255.255
+access-list 1 permit 192.168.99.0 0.0.0.255
+ip nat inside source list 1 interface GigabitEthernet0/1 overload
+
+end
+write memory
+
+
+--------------------------------------------------------------------------------
+BAGIAN 6: SETTING GUI SERVER DI CISCO PACKET TRACER
+--------------------------------------------------------------------------------
+1. SRV-DHCP-DNS (IP Static: 10.10.10.10, Mask: 255.255.255.0, GW: 10.10.10.1)
+   Buka Tab Services -> DHCP -> Buat 3 Pool (Nyalakan Service ON):
+   - Pool "POOL_IT_VLAN20"     : Gateway 10.10.20.1  | DNS 10.10.10.10 | Start IP 10.10.20.10  | Mask 255.255.255.0
+   - Pool "POOL_FIN_VLAN30"    : Gateway 10.10.30.1  | DNS 10.10.10.10 | Start IP 10.10.30.10  | Mask 255.255.255.0
+   - Pool "POOL_GUEST_VLAN99"  : Gateway 192.168.99.1| DNS 10.10.10.10 | Start IP 192.168.99.50| Mask 255.255.255.0
+   Buka Tab Services -> DNS (Service ON):
+   - Tambahkan A Record: "erp.kantor.local" -> Address: 10.10.10.20
+
+2. SRV-WEB-SYSLOG (IP Static: 10.10.10.20, Mask: 255.255.255.0, GW: 10.10.10.1)
+   - Pastikan HTTP/HTTPS ON dan SYSLOG ON.
+
+--------------------------------------------------------------------------------
+BAGIAN 7: SKENARIO PENGUJIAN UNTUK DIDEMOKAN KE HRD / INTERVIEWER
+--------------------------------------------------------------------------------
+1. Bukti DHCP Relay Berfungsi:
+   Buka PC-SYSADMIN, PC-FINANCE, dan GUEST-LAPTOP -> pilih IP Configuration: DHCP.
+   Semua perangkat akan otomatis mendapatkan IP sesuai VLAN masing-masing dari SRV-DHCP (10.10.10.10).
+2. Bukti Firewall ACL Berfungsi:
+   - Dari PC-SYSADMIN (VLAN 20): ping 10.10.10.20 (SUKSES / Reply).
+   - Dari GUEST-LAPTOP (VLAN 99): ping 203.0.113.1 (SUKSES ke Internet), tetapi
+     ping 10.10.10.20 atau 10.10.30.10 (DESTINATION HOST UNREACHABLE / Diblokir oleh ACL).
+3. Perintah Verifikasi CLI:
+   - DSW1-CORE-L3# show ip ospf neighbor
+   - DSW1-CORE-L3# show access-lists
+   - SW-ACCESS-FL1# show port-security interface fa0/1
+   - R1-EDGE-GW# show ip nat translations
+================================================================================

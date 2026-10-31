@@ -1,0 +1,44 @@
+hostname R3
+no ip domain-lookup
+enable secret class
+!
+ip dhcp excluded-address 192.168.3.1 192.168.3.10
+ip dhcp pool LAN_C
+ network 192.168.3.0 255.255.255.0
+ default-router 192.168.3.1
+ dns-server 8.8.8.8
+!
+interface Loopback0
+ ip address 3.3.3.3 255.255.255.255
+!
+interface GigabitEthernet0/0
+ description LAN C - to SW2
+ ip address 192.168.3.1 255.255.255.0
+ no shutdown
+!
+interface GigabitEthernet0/1
+ description WAN2 - to R2
+ ip address 10.2.23.2 255.255.255.252
+ no shutdown
+!
+router ospf 1
+ router-id 3.3.3.3
+ log-adjacency-changes
+ passive-interface GigabitEthernet0/0
+ network 192.168.3.0 0.0.0.255 area 0
+ network 10.2.23.0 0.0.0.3 area 0
+ network 3.3.3.3 0.0.0.0 area 0
+!
+ip domain-name lab.local
+crypto key generate rsa general-keys modulus 1024
+username admin secret cisco
+ip ssh version 2
+!
+line console 0
+ logging synchronous
+ password cisco
+ login
+!
+line vty 0 4
+ login local
+ transport input ssh

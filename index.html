@@ -1,14 +1,18 @@
 <!doctype html>
-<html lang="en">
+<html lang="id" data-theme="night">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Afrizal Rafli — web developer, network engineer, dan desainer asal Malang. Proyek Laravel, data science, dan infrastruktur jaringan." />
-    <meta name="theme-color" content="#d2f93c" />
-    <title>Afrizal Rafli — Web Developer &amp; Network Engineer</title>
+    <meta name="description" content="Afrizal Rafli Kusuma Wardana — System Administrator, Network Engineer & Cloud/Infrastructure Enthusiast. Administrasi Linux Server, Routing & Switching (MikroTik MTCNA, Cisco), Docker, Proxmox, dan K3 TI." />
+    <meta name="keywords" content="Afrizal Rafli, System Administrator, Network Engineer, Linux Server, MikroTik MTCNA, Cisco IOS, GNS3, Docker, Proxmox, Cloud Infrastructure, K3 TI, Malang" />
+    <meta name="theme-color" content="#0b0d05" />
+    <title>Afrizal Rafli — System Administrator &amp; Network Engineer</title>
     <script>
       try {
-        if (localStorage.getItem('room') === 'night') {
+        const savedRoom = localStorage.getItem('room');
+        if (savedRoom === 'day') {
+          document.documentElement.dataset.theme = 'day';
+        } else {
           document.documentElement.dataset.theme = 'night';
         }
       } catch (error) {}
@@ -19,4 +23,3 @@
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
-

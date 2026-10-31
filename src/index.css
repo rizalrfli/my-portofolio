@@ -1,9 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Inter+Tight:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
 @theme {
   --font-sans: "Inter Tight", "Segoe UI", sans-serif;
   --font-display: "Archivo", "Inter Tight", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
 /* Day is the default: full lime room, near-black ink. */
@@ -95,6 +96,10 @@ html { scroll-padding-top: 6rem; }
 .wordmark {
   font-family: "Archivo", "Inter Tight", sans-serif;
   font-variation-settings: "wdth" 100;
+}
+
+.mono {
+  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
 @layer components {
